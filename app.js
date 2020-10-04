@@ -1,5 +1,9 @@
+// REQUIREMENTS
 const inquirer = require("inquirer");
 
+// FUNCTIONS
+// asks initial question "What would you like to do?"
+// directs user to next function based on response
 function initialQuestion() {
   inquirer
     .prompt({
@@ -30,7 +34,7 @@ function initialQuestion() {
       } else if (res.action === "Remove Employee") {
         removeEmployee();
       } else if (res.action === "Update Employee Role") {
-        updateEmployeeRole();
+        updateRole();
       } else if (res.action === "Update Employee Manager") {
         updateManager();
       } else if (res.action === "View All Roles") {
@@ -42,4 +46,46 @@ function initialQuestion() {
     .catch((err) => console.log(err));
 }
 
+// displays all employees
+function viewAllEmployees() {
+  console.log("View All Employees");
+}
+
+// displays all employees by department
+function employeesByDepartment() {
+  console.log("View All Employees by Department");
+}
+
+// displays all employees by manager
+function employeesByManager() {
+  console.log("View All Employees by Manager");
+}
+
+// add an employee to the database
+function addEmployee() {
+  console.log("Add Employee");
+}
+
+// remove an employee from the database
+function removeEmployee() {
+  console.log("Remove Employee");
+}
+
+// update the role of an employee
+function updateRole() {
+  console.log("Update Employee Role");
+}
+
+// update the manager of an employee
+function updateManager() {
+  console.log("Update Employee Manager");
+}
+
+// view a list of all roles
+function viewAllRoles() {
+  console.log("View All Roles");
+}
+
+// FUNCTION CALLS
+// asks the initial question
 initialQuestion();
