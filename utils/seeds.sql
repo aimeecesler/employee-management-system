@@ -46,14 +46,18 @@ INSERT INTO roles (title, salary, dept_id) VALUES ("Supplier Relations Manager",
 INSERT INTO roles (title, salary, dept_id) VALUES ("Customer Relations Manager", 50000, 7);
 INSERT INTO roles (title, salary, dept_id) VALUES ("Head of Human Resources", 80000, 8);
 
-
-
-
-
-
-
-
-
-
-
-
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Michael", "Scott", 1, null);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Dwight", "Schrute", 2, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Jim", "Halpert", 4, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Pam", "Beasley", 3, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Stanley", "Hudson", 4, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Phyllis", "Lapin", 4, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Andy", "Bernard", 4, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Angela", "Martin", 5, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Oscar", "Gutierrez", 6, 8);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Kevin", "Malone", 6, 8);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Creed", "Bratton", 7, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Meredith", "Palmer", 8, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Kelly", "Kapoor", 9, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Toby", "Flenderson", 9, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Ryan", "Howard", 3, 13);
