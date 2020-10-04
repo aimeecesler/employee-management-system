@@ -1,5 +1,28 @@
 // REQUIREMENTS
 const inquirer = require("inquirer");
+const mysql = require("mysql");
+
+// CONNECTION DETAILS
+const connection = mysql.createConnection({
+  host: "localhost",
+
+  // PORT
+  port: 3306,
+
+  // USERNAME
+  user: "root",
+
+  // PASSWORD AND DATABASE
+  password: "Password1!",
+  database: "employeesDB",
+});
+
+// ESTABLISH CONNECTION
+connection.connect(function (err) {
+  if (err) throw err;
+  // ask initial question once connection is established
+  initialQuestion();
+});
 
 // FUNCTIONS
 // asks initial question "What would you like to do?"
@@ -85,7 +108,3 @@ function updateManager() {
 function viewAllRoles() {
   console.log("View All Roles");
 }
-
-// FUNCTION CALLS
-// asks the initial question
-initialQuestion();
