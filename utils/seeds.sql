@@ -35,6 +35,17 @@ INSERT INTO department (dept_name) VALUES ("Supplier Relations");
 INSERT INTO department (dept_name) VALUES ("Customer Relations");
 INSERT INTO department (dept_name) VALUES ("Human Resources");
 
+INSERT INTO roles (title, salary, dept_id) VALUES ("Regional Manager", 100000, 1);
+INSERT INTO roles (title, salary, dept_id) VALUES ("Assistant (to the) Regional Manager", 50000, 3);
+INSERT INTO roles (title, salary, dept_id) VALUES ("Receptionist", 35000, 3);
+INSERT INTO roles (title, salary, dept_id) VALUES ("Salesman", 80000, 2);
+INSERT INTO roles (title, salary, dept_id) VALUES ("Lead Accountant", 80000, 4);
+INSERT INTO roles (title, salary, dept_id) VALUES ("Accountant", 50000, 4);
+INSERT INTO roles (title, salary, dept_id) VALUES ("Quality Control Officer", 50000, 5);
+INSERT INTO roles (title, salary, dept_id) VALUES ("Supplier Relations Manager", 50000, 6);
+INSERT INTO roles (title, salary, dept_id) VALUES ("Customer Relations Manager", 50000, 7);
+INSERT INTO roles (title, salary, dept_id) VALUES ("Head of Human Resources", 80000, 8);
+
 
 
 
