@@ -63,7 +63,7 @@ function initialQuestion() {
       } else if (res.action === "View All Roles") {
         viewAllRoles();
       } else if (res.action === "Exit") {
-        return;
+        connection.end();
       }
     })
     .catch((err) => console.log(err));
@@ -72,6 +72,11 @@ function initialQuestion() {
 // displays all employees
 function viewAllEmployees() {
   console.log("View All Employees");
+  connection.query("SELECT * FROM employee", function (err, res) {
+      if (err) throw err;
+      console.table(res);
+      initialQuestion();
+  })
 }
 
 // displays all employees by department
