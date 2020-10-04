@@ -1,14 +1,17 @@
 DROP DATABASE IF EXISTS employeesDB;
 CREATE DATABASE employeesDB;
 
+-- USE THE EMPLOYEES DATABASE
 USE employeesDB;
 
+-- CREATE DEPARTMENT TABLE
 CREATE TABLE department (
     dept_id INT NOT NULL AUTO_INCREMENT,
     dept_name VARCHAR(30) NOT NULL,
     PRIMARY KEY(dept_id)
 );
 
+-- CREATE ROLES TABLE
 CREATE TABLE roles (
     role_id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR (30) NOT NULL,
@@ -17,6 +20,7 @@ CREATE TABLE roles (
     PRIMARY KEY (role_id)
 );
 
+-- CREATE EMPLOYEE TABLE
 CREATE TABLE employee (
     emp_id INT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(30) NOT NULL,
@@ -26,6 +30,7 @@ CREATE TABLE employee (
     PRIMARY KEY (emp_id)
 );
 
+-- CREATE DEPARTMENTS
 INSERT INTO department (dept_name) VALUES ("Management");
 INSERT INTO department (dept_name) VALUES ("Sales");
 INSERT INTO department (dept_name) VALUES ("Administrative");
@@ -35,6 +40,7 @@ INSERT INTO department (dept_name) VALUES ("Supplier Relations");
 INSERT INTO department (dept_name) VALUES ("Customer Relations");
 INSERT INTO department (dept_name) VALUES ("Human Resources");
 
+-- CREATE ROLES
 INSERT INTO roles (title, salary, dept_id) VALUES ("Regional Manager", 100000, 1);
 INSERT INTO roles (title, salary, dept_id) VALUES ("Assistant (to the) Regional Manager", 50000, 3);
 INSERT INTO roles (title, salary, dept_id) VALUES ("Receptionist", 35000, 3);
@@ -46,6 +52,7 @@ INSERT INTO roles (title, salary, dept_id) VALUES ("Supplier Relations Manager",
 INSERT INTO roles (title, salary, dept_id) VALUES ("Customer Relations Manager", 50000, 7);
 INSERT INTO roles (title, salary, dept_id) VALUES ("Head of Human Resources", 80000, 8);
 
+-- CREATE EMPLOYEES
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Michael", "Scott", 1, null);
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Dwight", "Schrute", 2, 1);
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Jim", "Halpert", 4, 1);
