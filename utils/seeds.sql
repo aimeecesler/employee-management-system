@@ -14,7 +14,7 @@ CREATE TABLE department (
 -- CREATE ROLES TABLE
 CREATE TABLE roles (
     role_id INT NOT NULL AUTO_INCREMENT,
-    title VARCHAR (30) NOT NULL,
+    title VARCHAR (35) NOT NULL,
     salary DECIMAL NOT NULL,
     dept_id INT NOT NULL,
     PRIMARY KEY (role_id)
@@ -51,6 +51,7 @@ INSERT INTO roles (title, salary, dept_id) VALUES ("Quality Control Officer", 50
 INSERT INTO roles (title, salary, dept_id) VALUES ("Supplier Relations Manager", 50000, 6);
 INSERT INTO roles (title, salary, dept_id) VALUES ("Customer Relations Manager", 50000, 7);
 INSERT INTO roles (title, salary, dept_id) VALUES ("Head of Human Resources", 80000, 8);
+INSERT INTO roles (title, salary, dept_id) VALUES ("Intern", 20000, 3);
 
 -- CREATE EMPLOYEES
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Michael", "Scott", 1, null);
@@ -66,5 +67,5 @@ INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Kevin
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Creed", "Bratton", 7, 1);
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Meredith", "Palmer", 8, 1);
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Kelly", "Kapoor", 9, 1);
-INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Toby", "Flenderson", 9, 1);
-INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Ryan", "Howard", 3, 13);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Toby", "Flenderson", 10, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Ryan", "Howard", 11, 13);

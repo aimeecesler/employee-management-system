@@ -20,6 +20,21 @@ const connection = mysql.createConnection({
 // ESTABLISH CONNECTION
 connection.connect(function (err) {
   if (err) throw err;
+  console.log(" _______________________________________________")
+  console.log("|    ___                    ___     ___   __    |");
+  console.log("|   |   \\  |   |  |\\   |   |   \\   |     |  \\   |");
+  console.log("|   |    \\ |   |  | \\  |   |    \\  |__   |__/   |");
+  console.log("|   |    / |   |  |  \\ |   |    /  |     | \\    |")
+  console.log("|   |___/  |___|  |   \\|   |___/   |___  |  \\   |");
+
+  console.log("|                                               |");
+  console.log("|                 ___  ___                      |");
+  console.log("|     |\\  /|  |  |    |     |    |  |\\   |      |");
+  console.log("|     | \\/ |  |  |__  |__   |    |  | \\  |      |");
+  console.log("|     |    |  |  |    |     |    |  |  \\ |      |")
+  console.log("|     |    |  |  |    |     |___ |  |   \\|      |");
+  console.log("|_______________________________________________|")
+  //
   // ask initial question once connection is established
   initialQuestion();
 });
@@ -72,11 +87,14 @@ function initialQuestion() {
 // displays all employees
 function viewAllEmployees() {
   console.log("View All Employees");
-  connection.query("SELECT * FROM employee", function (err, res) {
+  connection.query(
+    "SELECT * FROM employee LEFT JOIN roles ON employee.role_id = roles.role_id LEFT JOIN department ON roles.dept_id = department.dept_id",
+    function (err, res) {
       if (err) throw err;
       console.table(res);
       initialQuestion();
-  })
+    }
+  );
 }
 
 // displays all employees by department
