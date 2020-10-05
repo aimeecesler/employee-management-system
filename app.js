@@ -142,6 +142,18 @@ function employeesByDepartment() {
 // displays all employees by manager
 function employeesByManager() {
   console.log("View All Employees by Manager");
+  connection.query(
+    `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.dept_name, employee.manager_id
+    FROM employee 
+    LEFT JOIN roles ON employee.role_id = roles.id 
+    LEFT JOIN department ON roles.department_id = department.id
+    ORDER BY employee.manager_id`,
+    function (err, res) {
+      if (err) throw err;
+      console.table(res);
+      initialQuestion();
+    }
+  );
 }
 
 // add an employee to the database
