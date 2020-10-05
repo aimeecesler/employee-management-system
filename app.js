@@ -109,8 +109,8 @@ function viewAllEmployees() {
 //       if (err) throw err;
 //       connection.query(
 //         `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.dept_name, employee.manager_name
-//         FROM employee 
-//         LEFT JOIN roles ON employee.role_id = roles.id 
+//         FROM employee
+//         LEFT JOIN roles ON employee.role_id = roles.id
 //         LEFT JOIN department ON roles.department_id = department.id`,
 //         (err, res) => {
 //           if (err) throw err;
@@ -159,6 +159,92 @@ function employeesByManager() {
 // add an employee to the database
 function addEmployee() {
   console.log("Add Employee");
+  connection.query("SELECT * FROM roles", (err, data) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message:
+            "What is the first name of the employee you would like to add?",
+          name: "first_name",
+        },
+        {
+          type: "input",
+          message:
+            "What is the last name of the employee you would like to add?",
+          name: "last_name",
+        },
+        {
+          type: "list",
+          message: "What role will this employee have?",
+          name: "role",
+          choices: function () {
+            const roleArray = [];
+            for (let i = 0; i < data.length; i++) {
+              roleArray.push(data[i].title);
+            }
+            return roleArray;
+          },
+        },
+      ])
+      .then((res) => {
+        const firstName = res.first_name;
+        const lastName = res.last_name;
+        let roleID;
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].title === res.role) {
+            roleID = data[i].id;
+          }
+        }
+        // console.log(firstName, lastName, roleID);
+        connection.query("SELECT * FROM employee", (err, data) => {
+          if (err) throw err;
+          inquirer
+            .prompt({
+              type: "list",
+              message: "Who is this employee's manager?",
+              name: "manager",
+              choices: function () {
+                const employeeArray = [];
+                for (let i = 0; i < data.length; i++) {
+                  employeeArray.push(
+                    data[i].first_name + " " + data[i].last_name
+                  );
+                }
+                return employeeArray;
+              },
+            })
+            .then((res) => {
+              let managerID;
+              for (let i = 0; i < data.length; i++) {
+                if (
+                  data[i].first_name + " " + data[i].last_name ===
+                  res.manager
+                ) {
+                  managerID = data[i].id;
+                }
+              }
+              console.log(firstName, lastName, roleID, managerID);
+              connection.query(
+                "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
+                [firstName, lastName, roleID, managerID],
+                (err, res) => {
+                  if (err) throw err;
+                  console.log(res);
+                  initialQuestion();
+                }
+              );
+            })
+            .catch((err) => {
+              if (err) throw err;
+            });
+        });
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
 }
 
 // remove an employee from the database
