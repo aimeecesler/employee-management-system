@@ -1,3 +1,4 @@
+-- DROP AND CREATE DATABASE AS NEEDED
 DROP DATABASE IF EXISTS employeesDB;
 CREATE DATABASE employeesDB;
 
@@ -6,28 +7,29 @@ USE employeesDB;
 
 -- CREATE DEPARTMENT TABLE
 CREATE TABLE department (
-    dept_id INT NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     dept_name VARCHAR(30) NOT NULL,
-    PRIMARY KEY(dept_id)
+    PRIMARY KEY(id)
 );
 
 -- CREATE ROLES TABLE
 CREATE TABLE roles (
-    role_id INT NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR (35) NOT NULL,
     salary DECIMAL NOT NULL,
-    dept_id INT NOT NULL,
-    PRIMARY KEY (role_id)
+    department_id INT NOT NULL,
+    PRIMARY KEY (id)
 );
 
 -- CREATE EMPLOYEE TABLE
 CREATE TABLE employee (
-    emp_id INT NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
     role_id INT,
     manager_id INT NULL,
-    PRIMARY KEY (emp_id)
+    -- manager_name VARCHAR(60) NULL,
+    PRIMARY KEY (id)
 );
 
 -- CREATE DEPARTMENTS
@@ -41,17 +43,17 @@ INSERT INTO department (dept_name) VALUES ("Customer Relations");
 INSERT INTO department (dept_name) VALUES ("Human Resources");
 
 -- CREATE ROLES
-INSERT INTO roles (title, salary, dept_id) VALUES ("Regional Manager", 100000, 1);
-INSERT INTO roles (title, salary, dept_id) VALUES ("Assistant (to the) Regional Manager", 50000, 3);
-INSERT INTO roles (title, salary, dept_id) VALUES ("Receptionist", 35000, 3);
-INSERT INTO roles (title, salary, dept_id) VALUES ("Salesman", 80000, 2);
-INSERT INTO roles (title, salary, dept_id) VALUES ("Lead Accountant", 80000, 4);
-INSERT INTO roles (title, salary, dept_id) VALUES ("Accountant", 50000, 4);
-INSERT INTO roles (title, salary, dept_id) VALUES ("Quality Control Officer", 50000, 5);
-INSERT INTO roles (title, salary, dept_id) VALUES ("Supplier Relations Manager", 50000, 6);
-INSERT INTO roles (title, salary, dept_id) VALUES ("Customer Relations Manager", 50000, 7);
-INSERT INTO roles (title, salary, dept_id) VALUES ("Head of Human Resources", 80000, 8);
-INSERT INTO roles (title, salary, dept_id) VALUES ("Intern", 20000, 3);
+INSERT INTO roles (title, salary, department_id) VALUES ("Regional Manager", 100000, 1);
+INSERT INTO roles (title, salary, department_id) VALUES ("Assistant (to the) Regional Manager", 50000, 3);
+INSERT INTO roles (title, salary, department_id) VALUES ("Receptionist", 35000, 3);
+INSERT INTO roles (title, salary, department_id) VALUES ("Salesman", 80000, 2);
+INSERT INTO roles (title, salary, department_id) VALUES ("Lead Accountant", 80000, 4);
+INSERT INTO roles (title, salary, department_id) VALUES ("Accountant", 50000, 4);
+INSERT INTO roles (title, salary, department_id) VALUES ("Quality Control Officer", 50000, 5);
+INSERT INTO roles (title, salary, department_id) VALUES ("Supplier Relations Manager", 50000, 6);
+INSERT INTO roles (title, salary, department_id) VALUES ("Customer Relations Manager", 50000, 7);
+INSERT INTO roles (title, salary, department_id) VALUES ("Head of Human Resources", 80000, 8);
+INSERT INTO roles (title, salary, department_id) VALUES ("Intern", 20000, 3);
 
 -- CREATE EMPLOYEES
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Michael", "Scott", 1, null);

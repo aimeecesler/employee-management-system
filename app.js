@@ -20,20 +20,20 @@ const connection = mysql.createConnection({
 // ESTABLISH CONNECTION
 connection.connect(function (err) {
   if (err) throw err;
-  console.log(" _______________________________________________")
+  console.log(" _______________________________________________");
   console.log("|    ___                    ___     ___   __    |");
   console.log("|   |   \\  |   |  |\\   |   |   \\   |     |  \\   |");
   console.log("|   |    \\ |   |  | \\  |   |    \\  |__   |__/   |");
-  console.log("|   |    / |   |  |  \\ |   |    /  |     | \\    |")
+  console.log("|   |    / |   |  |  \\ |   |    /  |     | \\    |");
   console.log("|   |___/  |___|  |   \\|   |___/   |___  |  \\   |");
 
   console.log("|                                               |");
   console.log("|                 ___  ___                      |");
   console.log("|     |\\  /|  |  |    |     |    |  |\\   |      |");
   console.log("|     | \\/ |  |  |__  |__   |    |  | \\  |      |");
-  console.log("|     |    |  |  |    |     |    |  |  \\ |      |")
+  console.log("|     |    |  |  |    |     |    |  |  \\ |      |");
   console.log("|     |    |  |  |    |     |___ |  |   \\|      |");
-  console.log("|_______________________________________________|")
+  console.log("|_______________________________________________|");
   //
   // ask initial question once connection is established
   initialQuestion();
@@ -88,7 +88,10 @@ function initialQuestion() {
 function viewAllEmployees() {
   console.log("View All Employees");
   connection.query(
-    "SELECT * FROM employee LEFT JOIN roles ON employee.role_id = roles.role_id LEFT JOIN department ON roles.dept_id = department.dept_id",
+    `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.dept_name, employee.manager_id
+    FROM employee 
+    LEFT JOIN roles ON employee.role_id = roles.id 
+    LEFT JOIN department ON roles.department_id = department.id`,
     function (err, res) {
       if (err) throw err;
       console.table(res);
@@ -96,10 +99,44 @@ function viewAllEmployees() {
     }
   );
 }
+// function viewAllEmployees() {
+//   console.log("View All Employees");
+//   connection.query(
+//     `UPDATE employee e
+//     JOIN employee m ON m.id = e.manager_id
+//     SET e.manager_name = CONCAT(m.first_name, ' ', m.last_name)`,
+//     (err, res) => {
+//       if (err) throw err;
+//       connection.query(
+//         `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.dept_name, employee.manager_name
+//         FROM employee 
+//         LEFT JOIN roles ON employee.role_id = roles.id 
+//         LEFT JOIN department ON roles.department_id = department.id`,
+//         (err, res) => {
+//           if (err) throw err;
+//           console.table(res);
+//           initialQuestion();
+//         }
+//       );
+//     }
+//   );
+// }
 
 // displays all employees by department
 function employeesByDepartment() {
   console.log("View All Employees by Department");
+  connection.query(
+    `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.dept_name, employee.manager_id
+    FROM employee 
+    LEFT JOIN roles ON employee.role_id = roles.id 
+    LEFT JOIN department ON roles.department_id = department.id
+    ORDER BY department.dept_name`,
+    function (err, res) {
+      if (err) throw err;
+      console.table(res);
+      initialQuestion();
+    }
+  );
 }
 
 // displays all employees by manager
