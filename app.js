@@ -58,19 +58,17 @@ function initialQuestion() {
         "View All Employees",
         "View All Employees by Department",
         "View All Employees by Manager",
+        "View All Departments",
+        "View All Roles",
         "Add Employee",
         "Remove Employee",
         "Edit Employee",
-        // "Update Employee Role",
-        // "Update Employee Manager",
         "Add Department",
         "Remove Department",
         "Edit Department",
-        "View All Departments",
         "Add Role",
         "Remove Role",
         "Edit Role",
-        "View All Roles",
         "Exit",
       ],
     })
@@ -87,13 +85,7 @@ function initialQuestion() {
         removeEmployee();
       } else if (res.action === "Edit Employee") {
         editEmployee();
-      }
-      // else if (res.action === "Update Employee Role") {
-      //   updateRole();
-      // } else if (res.action === "Update Employee Manager") {
-      //   updateManager();
-      // }
-      else if (res.action === "Add Department") {
+      } else if (res.action === "Add Department") {
         addDepartment();
       } else if (res.action === "Remove Department") {
         removeDepartment();
@@ -263,102 +255,96 @@ function removeEmployee() {
 }
 
 function editEmployee() {
-  console.log("Edit Employee");
-  // TODO: ADD FUNCTION
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Are you sure you would like to edit an employee?",
+        name: "confirm",
+        choices: ["Yes", "No"],
+      },
+      {
+        type: "list",
+        choices: getEmployeeArray(),
+        message: "Which employee would you like to edit?",
+        name: "employeeToEdit",
+      },
+      {
+        type: "checkbox",
+        message: "Select all items you would like to update for this employee.",
+        name: "itemsToChange",
+        choices: ["First Name", "Last Name", "Role", "Manager"],
+      },
+      {
+        type: "input",
+        message: "What would you like their new first name to be?",
+        name: "firstName",
+        when: (answer) => answer.itemsToChange.includes("First Name"),
+      },
+      {
+        type: "input",
+        message: "What would you like their new last name to be?",
+        name: "lastName",
+        when: (answer) => answer.itemsToChange.includes("Last Name"),
+      },
+      {
+        type: "list",
+        message: "What would you like their new role to be?",
+        name: "role",
+        choices: getRoleArray(),
+        when: (answer) => answer.itemsToChange.includes("Role"),
+      },
+      {
+        type: "list",
+        message: "Who would you like their new manager to be?",
+        name: "manager",
+        choices: getManagerArray(),
+        when: (answer) => answer.itemsToChange.includes("Manager"),
+      },
+    ])
+    .then((res) => {
+      if (res.confirm === "No") {
+        initialQuestion();
+      } else {
+        for (let i = 0; i < res.itemsToChange.length; i++) {
+          if (res.itemsToChange[i] === "First Name") {
+            connection.query(
+              "UPDATE employee SET first_name = ? WHERE id = ?",
+              [res.firstName, res.employeeToEdit.id],
+              (err, result) => {
+                console.log("First Name Updated");
+              }
+            );
+          } else if (res.itemsToChange[i] === "Last Name") {
+            connection.query(
+              "UPDATE employee SET last_name = ? WHERE id = ?",
+              [res.lastName, res.employeeToEdit.id],
+              (err, result) => {
+                console.log("Last Name Updated");
+              }
+            );
+          } else if (res.itemsToChange[i] === "Role") {
+            connection.query(
+              "UPDATE employee SET role_id = ? WHERE id = ?",
+              [res.role.id, res.employeeToEdit.id],
+              (err, result) => {
+                console.log("Role Updated");
+              }
+            );
+          } else if (res.itemsToChange[i] === "Manager") {
+            connection.query(
+              "UPDATE employee SET manager_id = ? WHERE id = ?",
+              [res.manager.id, res.employeeToEdit.id],
+              (err, result) => {
+                console.log("Manager Updated");
+              }
+            );
+          }
+        }
+        initialQuestion();
+      }
+    });
 }
-
-// function updateRole() {
-//   inquirer
-//     .prompt([
-//       // appears to be some sort of bug that won't let a dynamic list item be the first question?
-//       {
-//         type: "list",
-//         message: "Are you sure you would like to update an employee's role?",
-//         name: "confirm",
-//         choices: ["Yes", "No"],
-//       },
-//       {
-//         type: "list",
-//         message: "Which employee would you like to update the role for?",
-//         name: "employeeChoice",
-//         choices: getEmployeeArray(),
-//       },
-//       {
-//         type: "list",
-//         message: "Which role would you like to give this employee?",
-//         name: "role",
-//         choices: getRoleArray(),
-//       },
-//     ])
-//     .then((res) => {
-//       let employeeID = res.employeeChoice.id;
-//       let roleID = res.role.id;
-//       connection.query(
-//         "UPDATE employee SET role_id = ? WHERE id = ?",
-//         [roleID, employeeID],
-//         (err, res) => {
-//           if (err) throw err;
-//           console.log(
-//             "Success! Role was updated."
-//           );
-//           initialQuestion();
-//         }
-//       );
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// }
-
-// // update the manager of an employee
-// function updateManager() {
-//   console.log("Update Employee Manager");
-//   connection.query("SELECT * FROM employee", (err, data) => {
-//     if (err) throw err;
-//     inquirer
-//       .prompt([
-//         {
-//           type: "list",
-//           message: "Which employee would you like to update the manager for?",
-//           name: "employee",
-//           choices: getEmployeeArray(),
-//         },
-//         {
-//           type: "list",
-//           message: "Which employee would you like to make their manager?",
-//           name: "manager",
-//           choices: renderEmployeeArray(data),
-//         },
-//         // TODO: ADD NONE OPTION?
-//       ])
-//       .then((res) => {
-//         let employeeID;
-//         let managerID;
-//         for (let i = 0; i < data.length; i++) {
-//           if (data[i].first_name + " " + data[i].last_name === res.employee) {
-//             employeeID = data[i].id;
-//           }
-//           if (data[i].first_name + " " + data[i].last_name === res.manager) {
-//             managerID = data[i].id;
-//           }
-//         }
-//         connection.query(
-//           "UPDATE employee SET manager_id = ? WHERE id = ?",
-//           [managerID, employeeID],
-//           (err) => {
-//             if (err) throw err;
-//             console.log(
-//               `Success! ${res.employee}'s manager was updated to ${res.manager}.`
-//             );
-//             initialQuestion();
-//           }
-//         );
-//       })
-//       .catch((err) => {
-//         if (err) throw err;
-//       });
-//   });
-// }
 
 function addDepartment() {
   // console.log("Add Department");
@@ -388,7 +374,7 @@ function removeDepartment() {
       // appears to be some sort of bug that won't let a dynamic list item be the first question?
       {
         type: "list",
-        message: "Are you sure you would like to remove department?",
+        message: "Are you sure you would like to remove a department?",
         name: "confirm",
         choices: ["Yes", "No"],
       },
@@ -580,17 +566,29 @@ function editRole() {
       } else {
         for (let i = 0; i < res.itemsToEdit.length; i++) {
           if (res.itemsToEdit[i] === "Title") {
-            connection.query("UPDATE roles SET title = ? WHERE id = ?", [res.title, res.roleToEdit.id], (err, result) => {
-              console.log("Title Updated");
-            })
+            connection.query(
+              "UPDATE roles SET title = ? WHERE id = ?",
+              [res.title, res.roleToEdit.id],
+              (err, result) => {
+                console.log("Title Updated");
+              }
+            );
           } else if (res.itemsToEdit[i] === "Salary") {
-            connection.query("UPDATE roles SET salary = ? WHERE id = ?", [res.salary, res.roleToEdit.id], (err, result) => {
-              console.log("Salary Updated");
-            })
+            connection.query(
+              "UPDATE roles SET salary = ? WHERE id = ?",
+              [res.salary, res.roleToEdit.id],
+              (err, result) => {
+                console.log("Salary Updated");
+              }
+            );
           } else if (res.itemsToEdit[i] === "Department") {
-            connection.query("UPDATE roles SET department_id = ? WHERE id = ?", [res.department.id, res.roleToEdit.id], (err, result) => {
-              console.log("Department Updated");
-            })
+            connection.query(
+              "UPDATE roles SET department_id = ? WHERE id = ?",
+              [res.department.id, res.roleToEdit.id],
+              (err, result) => {
+                console.log("Department Updated");
+              }
+            );
           } else {
             console.log("Error");
           }
