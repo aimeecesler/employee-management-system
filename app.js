@@ -291,6 +291,72 @@ function removeEmployee() {
 // update the role of an employee
 function updateRole() {
   console.log("Update Employee Role");
+  connection.query("SELECT * FROM employee", (err, data) => {
+    if (err) throw err;
+    inquirer
+      .prompt({
+        type: "list",
+        message: "Which employee would you like to update the role for?",
+        name: "updateRoleEmp",
+        choices: function () {
+          const employeeArray = [];
+          for (let i = 0; i < data.length; i++) {
+            employeeArray.push(data[i].first_name + " " + data[i].last_name);
+          }
+          return employeeArray;
+        },
+      })
+      .then((res) => {
+        let employeeID;
+        for (let i = 0; i < data.length; i++) {
+          if (
+            data[i].first_name + " " + data[i].last_name ===
+            res.updateRoleEmp
+          ) {
+            employeeID = data[i].id;
+          }
+        }
+        connection.query("SELECT * FROM roles", (err, data) => {
+          if (err) throw err;
+          inquirer
+            .prompt({
+              type: "list",
+              message: "What role would you like to give them?",
+              name: "role",
+              choices: function () {
+                const roleArray = [];
+                for (let i = 0; i < data.length; i++) {
+                  roleArray.push(data[i].title);
+                }
+                return roleArray;
+              },
+            })
+            .then((res) => {
+              let roleID;
+              for (let i = 0; i < data.length; i++) {
+                if (data[i].title === res.role) {
+                  roleID = data[i].id;
+                }
+              }
+              connection.query(
+                "UPDATE employee SET role_id = ? WHERE id = ?",
+                [roleID, employeeID],
+                (err, res) => {
+                  if (err) throw err;
+                  console.log(res);
+                  initialQuestion();
+                }
+              )
+            })
+            .catch((err) => {
+              if (err) throw err;
+            });
+        });
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
 }
 
 // update the manager of an employee
