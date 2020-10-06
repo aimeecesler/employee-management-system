@@ -246,9 +246,9 @@ function addEmployee() {
               connection.query(
                 "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
                 [firstName, lastName, roleID, managerID],
-                (err, res) => {
+                (err) => {
                   if (err) throw err;
-                  console.log(res);
+                  console.log(`Success! ${firstName} ${lastName} was added to employees.`);
                   initialQuestion();
                 }
               );
@@ -286,10 +286,10 @@ function removeEmployee() {
         connection.query(
           "DELETE FROM employee WHERE id = ?",
           [employeeID],
-          (err, res) => {
+          (err) => {
             if (err) throw err;
             console.log(res);
-            console.log(`Success! ${res.remove} was removed from employees.`);
+            console.log("Success! Employee was removed.");
             initialQuestion();
           }
         );
@@ -317,12 +317,12 @@ function updateRole() {
         name: "updateRoleEmp",
         choices: renderEmployeeArray(data),
       })
-      .then((res) => {
+      .then((response) => {
         let employeeID;
         for (let i = 0; i < data.length; i++) {
           if (
             data[i].first_name + " " + data[i].last_name ===
-            res.updateRoleEmp
+            response.updateRoleEmp
           ) {
             employeeID = data[i].id;
           }
@@ -346,9 +346,9 @@ function updateRole() {
               connection.query(
                 "UPDATE employee SET role_id = ? WHERE id = ?",
                 [roleID, employeeID],
-                (err, res) => {
+                (err) => {
                   if (err) throw err;
-                  console.log(res);
+                  console.log(`Success! ${response.updateRoleEmp}'s role was updated to ${res.role}.`);
                   initialQuestion();
                 }
               );
@@ -398,9 +398,9 @@ function updateManager() {
         connection.query(
           "UPDATE employee SET manager_id = ? WHERE id = ?",
           [managerID, employeeID],
-          (err, res) => {
+          (err) => {
             if (err) throw err;
-            console.log(res);
+            console.log(`Success! ${res.employee}'s manager was updated to ${res.manager}.`);
             initialQuestion();
           }
         );
@@ -519,7 +519,7 @@ function removeRole() {
         connection.query(
           "DELETE FROM roles WHERE id = ?",
           [roleID],
-          (err, res) => {
+          (err) => {
             if (err) throw err;
             console.log("Success! Role was removed.");
             initialQuestion();
