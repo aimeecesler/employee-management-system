@@ -346,7 +346,7 @@ function updateRole() {
                   console.log(res);
                   initialQuestion();
                 }
-              )
+              );
             })
             .catch((err) => {
               if (err) throw err;
@@ -362,9 +362,72 @@ function updateRole() {
 // update the manager of an employee
 function updateManager() {
   console.log("Update Employee Manager");
-}
+  connection.query("SELECT * FROM employee", (err, data) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+        type: "list",
+        message: "Which employee would you like to update the manager for?",
+        name: "employee",
+        choices: function () {
+          const employeeArray = [];
+          for (let i = 0; i < data.length; i++) {
+            employeeArray.push(data[i].first_name + " " + data[i].last_name);
+          }
+          return employeeArray;
+        }
+      },
+      {
+        type: "list",
+        message: "Which employee would you like to make their manager?",
+        name: "manager",
+        choices: function () {
+          const employeeArray = [];
+          for (let i = 0; i < data.length; i++) {
+            employeeArray.push(data[i].first_name + " " + data[i].last_name);
+          }
+          return employeeArray;
+        }
+      },
+      ]
+      )
+      .then((res) => {
+        let employeeID;
+        let managerID;
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].first_name + " " + data[i].last_name === res.employee) {
+            employeeID = data[i].id;
+          }
+          if (data[i].first_name + " " + data[i].last_name === res.manager) {
+            managerID = data[i].id;
+          }
+        }
+        connection.query(
+          "UPDATE employee SET manager_id = ? WHERE id = ?",
+          [managerID, employeeID],
+          (err, res) => {
+            if (err) throw err;
+            console.log(res);
+            initialQuestion();
+          }
+        );
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
+};
 
 // view a list of all roles
 function viewAllRoles() {
   console.log("View All Roles");
+  connection.query(
+    `SELECT roles.id, roles.title, roles.salary, department.dept_name 
+    FROM roles
+    LEFT JOIN department ON roles.department_id = department.id`,
+    (err, data) => {
+    if (err) throw err;
+    console.table(data);
+  });
 }
