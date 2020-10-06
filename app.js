@@ -54,8 +54,16 @@ function initialQuestion() {
         "View All Employees by Manager",
         "Add Employee",
         "Remove Employee",
+        "Edit Employee",
         "Update Employee Role",
         "Update Employee Manager",
+        "Add Department",
+        "Remove Department",
+        "Edit Department",
+        "View All Departments",
+        "Add Role",
+        "Remove Role",
+        "Edit Role",
         "View All Roles",
         "Exit",
       ],
@@ -71,10 +79,26 @@ function initialQuestion() {
         addEmployee();
       } else if (res.action === "Remove Employee") {
         removeEmployee();
+      } else if (res.action === "Edit Employee") {
+        editEmployee();
       } else if (res.action === "Update Employee Role") {
         updateRole();
       } else if (res.action === "Update Employee Manager") {
         updateManager();
+      } else if (res.action === "Add Department") {
+        addDepartment();
+      } else if (res.action === "Remove Department") {
+        removeDepartment();
+      } else if (res.action === "Edit Department") {
+        editDepartment();
+      } else if (res.action === "View All Departments") {
+        viewAllDepartments();
+      } else if (res.action === "Add Role") {
+        addRole();
+      } else if (res.action === "Remove Role") {
+        removeRole();
+      } else if (res.action === "Edit Role") {
+        editRole();
       } else if (res.action === "View All Roles") {
         viewAllRoles();
       } else if (res.action === "Exit") {
@@ -268,6 +292,11 @@ function removeEmployee() {
   });
 }
 
+function editEmployee () {
+  console.log("Edit Employee")
+  // TODO: ADD FUNCTION
+}
+
 // update the role of an employee
 function updateRole() {
   console.log("Update Employee Role");
@@ -372,6 +401,40 @@ function updateManager() {
         if (err) throw err;
       });
   });
+}
+
+function addDepartment () {
+  console.log("Add Department")
+  // TODO: ADD FUNCTION
+}
+
+function removeDepartment () {
+  console.log("Remove Department")
+  // TODO: ADD FUNCTION
+}
+
+function editDepartment () {
+  console.log("Edit Department")
+  // TODO: ADD FUNCTION
+}
+
+function viewAllDepartments () {
+  console.log("View All Departments")
+}
+
+function addRole () {
+  console.log("Add Role")
+  // TODO: ADD FUNCTION
+}
+
+function removeRole () {
+  console.log("Remove Role")
+  // TODO: ADD FUNCTION
+}
+
+function editRole () {
+  console.log("Edit Role")
+  // TODO: ADD FUNCTION
 }
 
 // view a list of all roles
