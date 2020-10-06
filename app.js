@@ -438,15 +438,19 @@ function removeDepartment() {
 
 function editDepartment() {
   // console.log("Edit Department");
-  connection.query("SELECT * FROM department", (err, data) => {
-    if (err) throw err;
     inquirer
       .prompt([
         {
           type: "list",
+          message: "Are you sure you would like to edit a department?",
+          name: "confirm",
+          choices: ["Yes", "No"],
+        },
+        {
+          type: "list",
           message: "Which department would you like to edit?",
           name: "editedDept",
-          choices: renderDepartmentArray(data),
+          choices: getDepartmentArray(),
         },
         {
           type: "input",
@@ -456,16 +460,15 @@ function editDepartment() {
       ])
       .then((res) => {
         connection.query(
-          "UPDATE department SET dept_name = ? WHERE dept_name = ?",
-          [res.deptName, res.editedDept],
+          "UPDATE department SET dept_name = ? WHERE id = ?",
+          [res.deptName, res.editedDept.id],
           (err) => {
             if (err) throw err;
-            console.log(`${res.editedDept} was updated to ${res.deptName}.`);
+            console.log(`${res.editedDept.dept_name} was updated to ${res.deptName}.`);
             initialQuestion();
           }
         );
       });
-  });
 }
 
 function viewAllDepartments() {
