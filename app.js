@@ -118,6 +118,7 @@ function viewAllEmployees() {
     LEFT JOIN department ON roles.department_id = department.id`,
     function (err, res) {
       if (err) throw err;
+      console.log("\nEmployee Listing\n--------------------------------------");
       console.table(res);
       initialQuestion();
     }
@@ -157,6 +158,7 @@ function employeesByDepartment() {
     ORDER BY department.dept_name`,
     function (err, res) {
       if (err) throw err;
+      console.log("\nEmployees by Department\n--------------------------------------");
       console.table(res);
       initialQuestion();
     }
@@ -174,6 +176,7 @@ function employeesByManager() {
     ORDER BY employee.manager_id`,
     function (err, res) {
       if (err) throw err;
+      console.log("\nEmployees by Manager\n--------------------------------------");
       console.table(res);
       initialQuestion();
     }
@@ -422,7 +425,7 @@ function viewAllDepartments() {
   // console.log("View All Departments")
   connection.query("SELECT * FROM department", (err, data) => {
     if (err) throw err;
-    console.log("\nDepartment Listing \n--------------------------------------");
+    console.log("\nDepartment Listing\n--------------------------------------");
     console.table(data);
   });
 }
@@ -451,6 +454,7 @@ function viewAllRoles() {
     LEFT JOIN department ON roles.department_id = department.id`,
     (err, data) => {
       if (err) throw err;
+      console.log("\nRoles Listing\n--------------------------------------");
       console.table(data);
     }
   );
