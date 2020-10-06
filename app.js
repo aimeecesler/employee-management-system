@@ -524,19 +524,24 @@ function addRole() {
 
 function removeRole() {
   // console.log("Remove Role");
-  connection.query("SELECT * FROM roles", (err, data) => {
-    if (err) throw err;
     inquirer
-      .prompt({
+      .prompt([
+        {
+          type: "list",
+          message: "Are you sure you would like to remove a role?",
+          name: "confirm",
+          choices: ["Yes", "No"],
+        },
+        {
         type: "list",
         message: "Which role would you like to remove?",
         name: "remove",
-        choices: renderRoleArray(data),
-      })
+        choices: getRoleArray(),
+      }])
       .then((res) => {
         connection.query(
-          "DELETE FROM roles WHERE title = ?",
-          [res.remove],
+          "DELETE FROM roles WHERE id = ?",
+          [res.remove.id],
           (err) => {
             if (err) throw err;
             console.log("Success! Role was removed.");
@@ -547,7 +552,6 @@ function removeRole() {
       .catch((err) => {
         if (err) throw err;
       });
-  });
 }
 
 function editRole() {
