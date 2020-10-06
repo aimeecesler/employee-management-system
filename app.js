@@ -227,7 +227,7 @@ function addEmployee() {
       const lastName = res.last_name;
       const roleID = res.role.id;
       const managerID = res.manager.id;
-      console.log(firstName, lastName, roleID, managerID);
+      // console.log(firstName, lastName, roleID, managerID);
       connection.query(
         "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
         [firstName, lastName, roleID, managerID],
@@ -247,14 +247,22 @@ function addEmployee() {
 
 // remove an employee from the database
 function removeEmployee() {
-  // console.log("Remove Employee");
   inquirer
-    .prompt({
-      type: "list",
-      message: "Which employee would you like to remove?",
-      name: "remove",
-      choices: getEmployeeArray(),
-    })
+    .prompt([
+      // appears to be some sort of bug that won't let a dynamic list item be the first question?
+      {
+        type: "list",
+        message: "Are you sure you would like to remove an employee?",
+        name: "confirm",
+        choices: ["Yes", "No"],
+      },
+      {
+        type: "list",
+        message: "Which employee would you like to remove?",
+        name: "remove",
+        choices: getEmployeeArray(),
+      },
+    ])
     .then((res) => {
       let employeeID = res.remove.id;
       connection.query(
@@ -262,7 +270,9 @@ function removeEmployee() {
         [employeeID],
         (err) => {
           if (err) throw err;
-          console.log("Success! Employee was removed.");
+          console.log(
+            `Success! ${res.remove.first_name} ${res.remove.last_name} was removed.`
+          );
           initialQuestion();
         }
       );
@@ -277,65 +287,47 @@ function editEmployee() {
   // TODO: ADD FUNCTION
 }
 
-// update the role of an employee
 function updateRole() {
-  console.log("Update Employee Role");
-  connection.query("SELECT * FROM employee", (err, data) => {
-    if (err) throw err;
-    inquirer
-      .prompt({
+  inquirer
+    .prompt([
+      // appears to be some sort of bug that won't let a dynamic list item be the first question?
+      {
+        type: "list",
+        message: "Are you sure you would like to update an employee's role?",
+        name: "confirm",
+        choices: ["Yes", "No"],
+      },
+      {
         type: "list",
         message: "Which employee would you like to update the role for?",
-        name: "updateRoleEmp",
-        choices: renderEmployeeArray(data),
-      })
-      .then((response) => {
-        let employeeID;
-        for (let i = 0; i < data.length; i++) {
-          if (
-            data[i].first_name + " " + data[i].last_name ===
-            response.updateRoleEmp
-          ) {
-            employeeID = data[i].id;
-          }
-        }
-        connection.query("SELECT * FROM roles", (err, data) => {
+        name: "employeeChoice",
+        choices: getEmployeeArray(),
+      },
+      {
+        type: "list",
+        message: "Which role would you like to give this employee?",
+        name: "role",
+        choices: getRoleArray(),
+      },
+    ])
+    .then((res) => {
+      let employeeID = res.employeeChoice.id;
+      let roleID = res.role.id;
+      connection.query(
+        "UPDATE employee SET role_id = ? WHERE id = ?",
+        [roleID, employeeID],
+        (err, res) => {
           if (err) throw err;
-          inquirer
-            .prompt({
-              type: "list",
-              message: "What role would you like to give them?",
-              name: "role",
-              choices: renderRoleArray(data),
-            })
-            .then((res) => {
-              let roleID;
-              for (let i = 0; i < data.length; i++) {
-                if (data[i].title === res.role) {
-                  roleID = data[i].id;
-                }
-              }
-              connection.query(
-                "UPDATE employee SET role_id = ? WHERE id = ?",
-                [roleID, employeeID],
-                (err) => {
-                  if (err) throw err;
-                  console.log(
-                    `Success! ${response.updateRoleEmp}'s role was updated to ${res.role}.`
-                  );
-                  initialQuestion();
-                }
-              );
-            })
-            .catch((err) => {
-              if (err) throw err;
-            });
-        });
-      })
-      .catch((err) => {
-        if (err) throw err;
-      });
-  });
+          console.log(
+            "Success! Role was updated."
+          );
+          initialQuestion();
+        }
+      );
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 // update the manager of an employee
@@ -553,158 +545,9 @@ function removeRole() {
   });
 }
 
-// function editRole() {
-//   // console.log("Edit Role");
-//   connection.query("SELECT * FROM roles", (err, data) => {
-//     if (err) throw err;
-//     inquirer
-//       .prompt([
-//         {
-//           type: "list",
-//           message: "Which role would you like to edit?",
-//           name: "editedRole",
-//           choices: renderRoleArray(data),
-//         },
-//         {
-//           type: "checkbox",
-//           message: "Please select all items you would like to update.",
-//           name: "itemsToUpdate",
-//           choices: ["Title", "Salary", "Department"],
-//         },
-//       ])
-//       .then((response) => {
-//         for (let i = 0; i < response.itemsToUpdate[i].length; i++) {
-//           if (response.itemsToUpdate[i] === "Department") {
-
-//           } else if (response.itemsToUpdate[i] === "Salary") {
-
-//           } else if (response.itemsToUpdate[i] === "Title") {
-
-//           }
-//         }
-//         initialQuestion();
-//       });
-//   });
-// }
-
-// connection.query("SELECT * FROM roles", (err, data) => {
-//   if (err) throw err;
-//   inquirer
-//     .prompt([
-//       {
-//         type: "list",
-//         message: "Which role would you like to edit?",
-//         name: "editedRole",
-//         choices: renderRoleArray(data),
-//       },
-//       {
-//         type: "list",
-//         message: "Would you like to update the title?",
-//         name: "titleChange",
-//         choices: ["Yes", "No"],
-//       },
-//       {
-//         type: "input",
-//         message: "What would you like the new title to be?",
-//         name: "title",
-//         when: (answers) => answers.titleChange === "Yes",
-//       },
-//       {
-//         type: "list",
-//         message: "Would you like to update the salary?",
-//         name: "salaryChange",
-//         choices: ["Yes", "No"],
-//       },
-//       {
-//         type: "input",
-//         message: "What would you like the new salary to be?",
-//         name: "salary",
-//         when: (answers) => answers.salaryChange === "Yes",
-//       },
-//     ])
-//     .then((response) => {
-//       connection.query("SELECT * FROM department", (err, data) => {
-//         if (err) throw err;
-//         inquirer
-//           .prompt([
-//             {
-//               type: "list",
-//               message: "Would you like to update the department?",
-//               name: "departmentChange",
-//               choices: ["Yes", "No"],
-//             },
-//             {
-//               type: "list",
-//               message: "What would you like the new department to be?",
-//               name: "department",
-//               choices: renderDepartmentArray(data),
-//               when: (answers) => answers.departmentChange === "Yes",
-//             },
-//           ])
-//           .then((res) => {
-//             if (
-//               response.titleChange === "No" &&
-//               response.salaryChange === "No" &&
-//               res.departmentChange === "No"
-//             ) {
-//               console.log(`No changes made to ${response.editedRole}.`);
-//               initialQuestion();
-//             } else {
-//               if (response.salaryChange === "Yes") {
-//                 connection.query(
-//                   "UPDATE roles SET salary = ? WHERE title = ?",
-//                   [response.salary, response.editedRole],
-//                   (err) => {
-//                     if (err) throw err;
-//                     console.log(
-//                       `Salary was updated for ${response.editedRole}`
-//                     );
-//                   }
-//                 );
-//               }
-//               if (res.departmentChange === "Yes") {
-//                 let newDeptID;
-//                 for (let i = 0; i < data.length; i++) {
-//                   if (data[i].dept_name === res.department) {
-//                     newDeptID = data[i].id;
-//                   }
-//                 }
-//                 connection.query(
-//                   "UPDATE roles SET department_id = ? WHERE title = ?",
-//                   [newDeptID, response.editedRole],
-//                   (err) => {
-//                     if (err) throw err;
-//                     console.log(
-//                       `Department was updated for ${response.editedRole}`
-//                     );
-//                   }
-//                 );
-//               }
-//               if (response.titleChange === "Yes") {
-//                 connection.query(
-//                   "UPDATE roles SET title = ? WHERE title = ?",
-//                   [response.title, response.editedRole],
-//                   (err) => {
-//                     if (err) throw err;
-//                     console.log(
-//                       `Title was updated for ${response.editedRole}`
-//                     );
-//                   }
-//                 );
-//               }
-//             }
-//             // TODO: fix async issues
-//             return initialQuestion();
-//           })
-//           .catch((err) => {
-//             if (err) throw err;
-//           });
-//       });
-//     })
-//     .catch((err) => {
-//       if (err) throw err;
-//     });
-// });
+function editRole() {
+  // TODO: ADD FUNCTION
+}
 
 // view a list of all roles
 function viewAllRoles() {
@@ -728,11 +571,11 @@ function getEmployeeArray() {
     (err, data) => {
       if (err) throw err;
       for (let i = 0; i < data.length; i++) {
-        let employee = {
+        let thisEmployee = {
           name: `${data[i].first_name} ${data[i].last_name}`,
           value: data[i],
         };
-        employeeArray.push(employee);
+        employeeArray.push(thisEmployee);
       }
     }
   );
