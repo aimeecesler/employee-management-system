@@ -132,28 +132,6 @@ function viewAllEmployees() {
     }
   );
 }
-// function viewAllEmployees() {
-//   console.log("View All Employees");
-//   connection.query(
-//     `UPDATE employee e
-//     JOIN employee m ON m.id = e.manager_id
-//     SET e.manager_name = CONCAT(m.first_name, ' ', m.last_name)`,
-//     (err, res) => {
-//       if (err) throw err;
-//       connection.query(
-//         `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.dept_name, employee.manager_name
-//         FROM employee
-//         LEFT JOIN roles ON employee.role_id = roles.id
-//         LEFT JOIN department ON roles.department_id = department.id`,
-//         (err, res) => {
-//           if (err) throw err;
-//           console.table(res);
-//           initialQuestion();
-//         }
-//       );
-//     }
-//   );
-// }
 
 // displays all employees by department
 function employeesByDepartment() {
@@ -524,38 +502,102 @@ function addRole() {
 
 function removeRole() {
   // console.log("Remove Role");
-    inquirer
-      .prompt([
-        {
-          type: "list",
-          message: "Are you sure you would like to remove a role?",
-          name: "confirm",
-          choices: ["Yes", "No"],
-        },
-        {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Are you sure you would like to remove a role?",
+        name: "confirm",
+        choices: ["Yes", "No"],
+      },
+      {
         type: "list",
         message: "Which role would you like to remove?",
         name: "remove",
         choices: getRoleArray(),
-      }])
-      .then((res) => {
-        connection.query(
-          "DELETE FROM roles WHERE id = ?",
-          [res.remove.id],
-          (err) => {
-            if (err) throw err;
-            console.log("Success! Role was removed.");
-            initialQuestion();
-          }
-        );
-      })
-      .catch((err) => {
-        if (err) throw err;
-      });
+      },
+    ])
+    .then((res) => {
+      connection.query(
+        "DELETE FROM roles WHERE id = ?",
+        [res.remove.id],
+        (err) => {
+          if (err) throw err;
+          console.log("Success! Role was removed.");
+          initialQuestion();
+        }
+      );
+    })
+    .catch((err) => {
+      if (err) throw err;
+    });
 }
 
 function editRole() {
-  // TODO: ADD FUNCTION
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Are you sure you would like to edit a role?",
+        name: "confirm",
+        choices: ["Yes", "No"],
+      },
+      {
+        type: "list",
+        message: "Which role would you like to edit?",
+        name: "roleToEdit",
+        choices: getRoleArray(),
+      },
+      {
+        type: "checkbox",
+        message: "Select all items you would like to edit for this role.",
+        name: "itemsToEdit",
+        choices: ["Title", "Salary", "Department"],
+      },
+      {
+        type: "input",
+        message: "What would you like the new title to be?",
+        name: "title",
+        when: (answer) => answer.itemsToEdit.includes("Title"),
+      },
+      {
+        type: "input",
+        message: "What would you like the new salary to be?",
+        name: "salary",
+        when: (answer) => answer.itemsToEdit.includes("Salary"),
+      },
+      {
+        type: "list",
+        message: "What would you like the new department to be?",
+        name: "department",
+        choices: getDepartmentArray(),
+        when: (answer) => answer.itemsToEdit.includes("Department"),
+      },
+    ])
+    .then((res) => {
+      if (res.conirm === "No") {
+        initialQuestion();
+      } else {
+        for (let i = 0; i < res.itemsToEdit.length; i++) {
+          if (res.itemsToEdit[i] === "Title") {
+            connection.query("UPDATE roles SET title = ? WHERE id = ?", [res.title, res.roleToEdit.id], (err, result) => {
+              console.log("Title Updated");
+            })
+          } else if (res.itemsToEdit[i] === "Salary") {
+            connection.query("UPDATE roles SET salary = ? WHERE id = ?", [res.salary, res.roleToEdit.id], (err, result) => {
+              console.log("Salary Updated");
+            })
+          } else if (res.itemsToEdit[i] === "Department") {
+            connection.query("UPDATE roles SET department_id = ? WHERE id = ?", [res.department.id, res.roleToEdit.id], (err, result) => {
+              console.log("Department Updated");
+            })
+          } else {
+            console.log("Error");
+          }
+        }
+        initialQuestion();
+      }
+    });
 }
 
 // view a list of all roles
