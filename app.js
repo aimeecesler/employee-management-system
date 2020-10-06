@@ -87,11 +87,13 @@ function initialQuestion() {
         removeEmployee();
       } else if (res.action === "Edit Employee") {
         editEmployee();
-      } else if (res.action === "Update Employee Role") {
-        updateRole();
-      } else if (res.action === "Update Employee Manager") {
-        updateManager();
-      } else if (res.action === "Add Department") {
+      } 
+      // else if (res.action === "Update Employee Role") {
+      //   updateRole();
+      // } else if (res.action === "Update Employee Manager") {
+      //   updateManager();
+      // } 
+      else if (res.action === "Add Department") {
         addDepartment();
       } else if (res.action === "Remove Department") {
         removeDepartment();
@@ -287,98 +289,98 @@ function editEmployee() {
   // TODO: ADD FUNCTION
 }
 
-function updateRole() {
-  inquirer
-    .prompt([
-      // appears to be some sort of bug that won't let a dynamic list item be the first question?
-      {
-        type: "list",
-        message: "Are you sure you would like to update an employee's role?",
-        name: "confirm",
-        choices: ["Yes", "No"],
-      },
-      {
-        type: "list",
-        message: "Which employee would you like to update the role for?",
-        name: "employeeChoice",
-        choices: getEmployeeArray(),
-      },
-      {
-        type: "list",
-        message: "Which role would you like to give this employee?",
-        name: "role",
-        choices: getRoleArray(),
-      },
-    ])
-    .then((res) => {
-      let employeeID = res.employeeChoice.id;
-      let roleID = res.role.id;
-      connection.query(
-        "UPDATE employee SET role_id = ? WHERE id = ?",
-        [roleID, employeeID],
-        (err, res) => {
-          if (err) throw err;
-          console.log(
-            "Success! Role was updated."
-          );
-          initialQuestion();
-        }
-      );
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
+// function updateRole() {
+//   inquirer
+//     .prompt([
+//       // appears to be some sort of bug that won't let a dynamic list item be the first question?
+//       {
+//         type: "list",
+//         message: "Are you sure you would like to update an employee's role?",
+//         name: "confirm",
+//         choices: ["Yes", "No"],
+//       },
+//       {
+//         type: "list",
+//         message: "Which employee would you like to update the role for?",
+//         name: "employeeChoice",
+//         choices: getEmployeeArray(),
+//       },
+//       {
+//         type: "list",
+//         message: "Which role would you like to give this employee?",
+//         name: "role",
+//         choices: getRoleArray(),
+//       },
+//     ])
+//     .then((res) => {
+//       let employeeID = res.employeeChoice.id;
+//       let roleID = res.role.id;
+//       connection.query(
+//         "UPDATE employee SET role_id = ? WHERE id = ?",
+//         [roleID, employeeID],
+//         (err, res) => {
+//           if (err) throw err;
+//           console.log(
+//             "Success! Role was updated."
+//           );
+//           initialQuestion();
+//         }
+//       );
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// }
 
-// update the manager of an employee
-function updateManager() {
-  console.log("Update Employee Manager");
-  connection.query("SELECT * FROM employee", (err, data) => {
-    if (err) throw err;
-    inquirer
-      .prompt([
-        {
-          type: "list",
-          message: "Which employee would you like to update the manager for?",
-          name: "employee",
-          choices: renderEmployeeArray(data),
-        },
-        {
-          type: "list",
-          message: "Which employee would you like to make their manager?",
-          name: "manager",
-          choices: renderEmployeeArray(data),
-        },
-        // TODO: ADD NONE OPTION?
-      ])
-      .then((res) => {
-        let employeeID;
-        let managerID;
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].first_name + " " + data[i].last_name === res.employee) {
-            employeeID = data[i].id;
-          }
-          if (data[i].first_name + " " + data[i].last_name === res.manager) {
-            managerID = data[i].id;
-          }
-        }
-        connection.query(
-          "UPDATE employee SET manager_id = ? WHERE id = ?",
-          [managerID, employeeID],
-          (err) => {
-            if (err) throw err;
-            console.log(
-              `Success! ${res.employee}'s manager was updated to ${res.manager}.`
-            );
-            initialQuestion();
-          }
-        );
-      })
-      .catch((err) => {
-        if (err) throw err;
-      });
-  });
-}
+// // update the manager of an employee
+// function updateManager() {
+//   console.log("Update Employee Manager");
+//   connection.query("SELECT * FROM employee", (err, data) => {
+//     if (err) throw err;
+//     inquirer
+//       .prompt([
+//         {
+//           type: "list",
+//           message: "Which employee would you like to update the manager for?",
+//           name: "employee",
+//           choices: getEmployeeArray(),
+//         },
+//         {
+//           type: "list",
+//           message: "Which employee would you like to make their manager?",
+//           name: "manager",
+//           choices: renderEmployeeArray(data),
+//         },
+//         // TODO: ADD NONE OPTION?
+//       ])
+//       .then((res) => {
+//         let employeeID;
+//         let managerID;
+//         for (let i = 0; i < data.length; i++) {
+//           if (data[i].first_name + " " + data[i].last_name === res.employee) {
+//             employeeID = data[i].id;
+//           }
+//           if (data[i].first_name + " " + data[i].last_name === res.manager) {
+//             managerID = data[i].id;
+//           }
+//         }
+//         connection.query(
+//           "UPDATE employee SET manager_id = ? WHERE id = ?",
+//           [managerID, employeeID],
+//           (err) => {
+//             if (err) throw err;
+//             console.log(
+//               `Success! ${res.employee}'s manager was updated to ${res.manager}.`
+//             );
+//             initialQuestion();
+//           }
+//         );
+//       })
+//       .catch((err) => {
+//         if (err) throw err;
+//       });
+//   });
+// }
 
 function addDepartment() {
   // console.log("Add Department");
@@ -403,19 +405,25 @@ function addDepartment() {
 
 function removeDepartment() {
   // console.log("Remove Department");
-  connection.query("SELECT * FROM department", (err, data) => {
-    if (err) throw err;
     inquirer
-      .prompt({
+      .prompt([
+        {
+          type: "list",
+          message: "Are you sure you would like to remove department?",
+          name: "confirm",
+          choices: ["Yes", "No"],
+        },
+        {
         type: "list",
         message: "Which role would you like to remove?",
         name: "remove",
-        choices: renderDepartmentArray(data),
-      })
+        choices: getDepartmentArray(),
+      }
+    ])
       .then((res) => {
         connection.query(
-          "DELETE FROM department WHERE dept_name = ?",
-          [res.remove],
+          "DELETE FROM department WHERE id = ?",
+          [res.remove.id],
           (err) => {
             if (err) throw err;
             console.log("Success! Department was removed.");
@@ -426,7 +434,6 @@ function removeDepartment() {
       .catch((err) => {
         if (err) throw err;
       });
-  });
 }
 
 function editDepartment() {
