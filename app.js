@@ -292,8 +292,8 @@ function removeEmployee() {
   });
 }
 
-function editEmployee () {
-  console.log("Edit Employee")
+function editEmployee() {
+  console.log("Edit Employee");
   // TODO: ADD FUNCTION
 }
 
@@ -403,37 +403,42 @@ function updateManager() {
   });
 }
 
-function addDepartment () {
-  console.log("Add Department")
+function addDepartment() {
+  console.log("Add Department");
   // TODO: ADD FUNCTION
 }
 
-function removeDepartment () {
-  console.log("Remove Department")
+function removeDepartment() {
+  console.log("Remove Department");
   // TODO: ADD FUNCTION
 }
 
-function editDepartment () {
-  console.log("Edit Department")
+function editDepartment() {
+  console.log("Edit Department");
   // TODO: ADD FUNCTION
 }
 
-function viewAllDepartments () {
-  console.log("View All Departments")
+function viewAllDepartments() {
+  // console.log("View All Departments")
+  connection.query("SELECT * FROM department", (err, data) => {
+    if (err) throw err;
+    console.log("\nDepartment Listing \n--------------------------------------");
+    console.table(data);
+  });
 }
 
-function addRole () {
-  console.log("Add Role")
+function addRole() {
+  console.log("Add Role");
   // TODO: ADD FUNCTION
 }
 
-function removeRole () {
-  console.log("Remove Role")
+function removeRole() {
+  console.log("Remove Role");
   // TODO: ADD FUNCTION
 }
 
-function editRole () {
-  console.log("Edit Role")
+function editRole() {
+  console.log("Edit Role");
   // TODO: ADD FUNCTION
 }
 
