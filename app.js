@@ -8,6 +8,8 @@ const roleArray = [];
 const departmentArray = [];
 const managerArray = [];
 
+// TODO: UPDATE ALL FUNCTIONS THAT HAVE A CONFIRM SO THAT THEY WILL EXIT IF NO IS SELECTED
+
 // CONNECTION DETAILS
 const connection = mysql.createConnection({
   host: "localhost",
@@ -112,8 +114,9 @@ function initialQuestion() {
 function viewAllEmployees() {
   console.log("View All Employees");
   connection.query(
-    `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.dept_name, employee.manager_id
+    `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.dept_name, concat(manager.first_name," ", manager.last_name) AS "manager"
     FROM employee 
+    LEFT JOIN employee AS manager ON employee.manager_id = manager.id
     LEFT JOIN roles ON employee.role_id = roles.id 
     LEFT JOIN department ON roles.department_id = department.id`,
     function (err, res) {
@@ -129,8 +132,9 @@ function viewAllEmployees() {
 function employeesByDepartment() {
   console.log("View All Employees by Department");
   connection.query(
-    `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.dept_name, employee.manager_id
-    FROM employee 
+    `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.dept_name, concat(manager.first_name," ", manager.last_name) AS "manager"
+    FROM employee
+    LEFT JOIN employee AS manager ON employee.manager_id = manager.id
     LEFT JOIN roles ON employee.role_id = roles.id 
     LEFT JOIN department ON roles.department_id = department.id
     ORDER BY department.dept_name`,
@@ -149,11 +153,12 @@ function employeesByDepartment() {
 function employeesByManager() {
   console.log("View All Employees by Manager");
   connection.query(
-    `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.dept_name, employee.manager_id
+    `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.dept_name, concat(manager.first_name," ", manager.last_name) AS "manager"
     FROM employee 
+    LEFT JOIN employee AS manager ON employee.manager_id = manager.id 
     LEFT JOIN roles ON employee.role_id = roles.id 
     LEFT JOIN department ON roles.department_id = department.id
-    ORDER BY employee.manager_id`,
+    ORDER BY manager`,
     function (err, res) {
       if (err) throw err;
       console.log(
