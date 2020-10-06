@@ -238,6 +238,7 @@ function removeEmployee() {
         message: "Which employee would you like to remove?",
         name: "remove",
         choices: getEmployeeArray(),
+        when: (answer) => answer.confirm === "Yes",
       },
     ])
     .then((res) => {
@@ -273,12 +274,14 @@ function editEmployee() {
         choices: getEmployeeArray(),
         message: "Which employee would you like to edit?",
         name: "employeeToEdit",
+        when: (answer) => answer.confirm === "Yes",
       },
       {
         type: "checkbox",
         message: "Select all items you would like to update for this employee.",
         name: "itemsToChange",
         choices: ["First Name", "Last Name", "Role", "Manager"],
+        when: (answer) => answer.confirm === "Yes",
       },
       {
         type: "input",
@@ -388,6 +391,7 @@ function removeDepartment() {
         message: "Which role would you like to remove?",
         name: "remove",
         choices: getDepartmentArray(),
+        when: (answer) => answer.confirm === "Yes",
       },
     ])
     .then((res) => {
@@ -421,11 +425,13 @@ function editDepartment() {
         message: "Which department would you like to edit?",
         name: "editedDept",
         choices: getDepartmentArray(),
+        when: (answer) => answer.confirm === "Yes",
       },
       {
         type: "input",
         message: "What would you like to change the department name to?",
         name: "deptName",
+        when: (answer) => answer.confirm === "Yes",
       },
     ])
     .then((res) => {
@@ -506,6 +512,7 @@ function removeRole() {
         message: "Which role would you like to remove?",
         name: "remove",
         choices: getRoleArray(),
+        when: (answer) => answer.confirm === "Yes",
       },
     ])
     .then((res) => {
@@ -538,12 +545,14 @@ function editRole() {
         message: "Which role would you like to edit?",
         name: "roleToEdit",
         choices: getRoleArray(),
+        when: (answer) => answer.confirm === "Yes",
       },
       {
         type: "checkbox",
         message: "Select all items you would like to edit for this role.",
         name: "itemsToEdit",
         choices: ["Title", "Salary", "Department"],
+        when: (answer) => answer.confirm === "Yes",
       },
       {
         type: "input",
