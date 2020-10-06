@@ -248,7 +248,9 @@ function addEmployee() {
                 [firstName, lastName, roleID, managerID],
                 (err) => {
                   if (err) throw err;
-                  console.log(`Success! ${firstName} ${lastName} was added to employees.`);
+                  console.log(
+                    `Success! ${firstName} ${lastName} was added to employees.`
+                  );
                   initialQuestion();
                 }
               );
@@ -348,7 +350,9 @@ function updateRole() {
                 [roleID, employeeID],
                 (err) => {
                   if (err) throw err;
-                  console.log(`Success! ${response.updateRoleEmp}'s role was updated to ${res.role}.`);
+                  console.log(
+                    `Success! ${response.updateRoleEmp}'s role was updated to ${res.role}.`
+                  );
                   initialQuestion();
                 }
               );
@@ -400,7 +404,9 @@ function updateManager() {
           [managerID, employeeID],
           (err) => {
             if (err) throw err;
-            console.log(`Success! ${res.employee}'s manager was updated to ${res.manager}.`);
+            console.log(
+              `Success! ${res.employee}'s manager was updated to ${res.manager}.`
+            );
             initialQuestion();
           }
         );
@@ -550,8 +556,122 @@ function removeRole() {
 }
 
 function editRole() {
-  console.log("Edit Role");
-  // TODO: ADD FUNCTION
+  // console.log("Edit Role");
+  connection.query("SELECT * FROM roles", (err, data) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          message: "Which role would you like to edit?",
+          name: "editedRole",
+          choices: renderRoleArray(data),
+        },
+        {
+          type: "list",
+          message: "Would you like to update the title?",
+          name: "titleChange",
+          choices: ["Yes", "No"],
+        },
+        {
+          type: "input",
+          message: "What would you like the new title to be?",
+          name: "title",
+          when: (answers) => answers.titleChange === "Yes",
+        },
+        {
+          type: "list",
+          message: "Would you like to update the salary?",
+          name: "salaryChange",
+          choices: ["Yes", "No"],
+        },
+        {
+          type: "input",
+          message: "What would you like the new salary to be?",
+          name: "salary",
+          when: (answers) => answers.salaryChange === "Yes",
+        },
+      ])
+      .then((response) => {
+        connection.query("SELECT * FROM department", (err, data) => {
+          if (err) throw err;
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                message: "Would you like to update the department?",
+                name: "departmentChange",
+                choices: ["Yes", "No"],
+              },
+              {
+                type: "list",
+                message: "What would you like the new department to be?",
+                name: "department",
+                choices: renderDepartmentArray(data),
+                when: (answers) => answers.departmentChange === "Yes",
+              },
+            ])
+            .then((res) => {
+              if (
+                response.titleChange === "No" &&
+                response.salaryChange === "No" &&
+                res.departmentChange === "No"
+              ) {
+                console.log(`No changes made to ${response.editedRole}.`);
+                initialQuestion();
+              } else {
+              if (response.salaryChange === "Yes") {
+                connection.query(
+                  "UPDATE roles SET salary = ? WHERE title = ?",
+                  [response.salary, response.editedRole],
+                  (err) => {
+                    if (err) throw err;
+                    console.log(
+                      `Salary was updated for ${response.editedRole}`
+                    );
+                  }
+                );
+              }
+              if (res.departmentChange === "Yes") {
+                let newDeptID;
+                for (let i = 0; i < data.length; i++) {
+                  if (data[i].dept_name === res.department) {
+                    newDeptID = data[i].id;
+                  }
+                }
+                connection.query(
+                  "UPDATE roles SET department_id = ? WHERE title = ?",
+                  [newDeptID, response.editedRole],
+                  (err) => {
+                    if (err) throw err;
+                    console.log(
+                      `Department was updated for ${response.editedRole}`
+                    );
+                  }
+                );
+              }
+              if (response.titleChange === "Yes") {
+                connection.query(
+                  "UPDATE roles SET title = ? WHERE title = ?",
+                  [response.title, response.editedRole],
+                  (err) => {
+                    if (err) throw err;
+                    console.log(`Title was updated for ${response.editedRole}`);
+                  }
+                );
+              }
+            }
+            return initialQuestion();
+            })
+            .catch((err) => {
+              if (err) throw err;
+            });
+        });
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
 }
 
 // view a list of all roles
