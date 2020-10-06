@@ -205,15 +205,7 @@ function addEmployee() {
               type: "list",
               message: "Who is this employee's manager?",
               name: "manager",
-              choices: function () {
-                const employeeArray = [];
-                for (let i = 0; i < data.length; i++) {
-                  employeeArray.push(
-                    data[i].first_name + " " + data[i].last_name
-                  );
-                }
-                return employeeArray;
-              },
+              choices: renderEmployeeArray(data),
             })
             .then((res) => {
               let managerID;
@@ -257,13 +249,7 @@ function removeEmployee() {
         type: "list",
         message: "Which employee would you like to remove?",
         name: "remove",
-        choices: function () {
-          const employeeArray = [];
-          for (let i = 0; i < data.length; i++) {
-            employeeArray.push(data[i].first_name + " " + data[i].last_name);
-          }
-          return employeeArray;
-        },
+        choices: renderEmployeeArray(data),
       })
       .then((res) => {
         let employeeID;
@@ -298,13 +284,7 @@ function updateRole() {
         type: "list",
         message: "Which employee would you like to update the role for?",
         name: "updateRoleEmp",
-        choices: function () {
-          const employeeArray = [];
-          for (let i = 0; i < data.length; i++) {
-            employeeArray.push(data[i].first_name + " " + data[i].last_name);
-          }
-          return employeeArray;
-        },
+        choices: renderEmployeeArray(data),
       })
       .then((res) => {
         let employeeID;
@@ -367,31 +347,18 @@ function updateManager() {
     inquirer
       .prompt([
         {
-        type: "list",
-        message: "Which employee would you like to update the manager for?",
-        name: "employee",
-        choices: function () {
-          const employeeArray = [];
-          for (let i = 0; i < data.length; i++) {
-            employeeArray.push(data[i].first_name + " " + data[i].last_name);
-          }
-          return employeeArray;
-        }
-      },
-      {
-        type: "list",
-        message: "Which employee would you like to make their manager?",
-        name: "manager",
-        choices: function () {
-          const employeeArray = [];
-          for (let i = 0; i < data.length; i++) {
-            employeeArray.push(data[i].first_name + " " + data[i].last_name);
-          }
-          return employeeArray;
-        }
-      },
-      ]
-      )
+          type: "list",
+          message: "Which employee would you like to update the manager for?",
+          name: "employee",
+          choices: renderEmployeeArray(data),
+        },
+        {
+          type: "list",
+          message: "Which employee would you like to make their manager?",
+          name: "manager",
+          choices: renderEmployeeArray(data),
+        },
+      ])
       .then((res) => {
         let employeeID;
         let managerID;
@@ -417,7 +384,7 @@ function updateManager() {
         if (err) throw err;
       });
   });
-};
+}
 
 // view a list of all roles
 function viewAllRoles() {
@@ -427,7 +394,16 @@ function viewAllRoles() {
     FROM roles
     LEFT JOIN department ON roles.department_id = department.id`,
     (err, data) => {
-    if (err) throw err;
-    console.table(data);
-  });
+      if (err) throw err;
+      console.table(data);
+    }
+  );
+}
+
+function renderEmployeeArray(data) {
+  const employeeArray = [];
+  for (let i = 0; i < data.length; i++) {
+    employeeArray.push(data[i].first_name + " " + data[i].last_name);
+  }
+  return employeeArray;
 }
