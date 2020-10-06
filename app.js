@@ -158,7 +158,9 @@ function employeesByDepartment() {
     ORDER BY department.dept_name`,
     function (err, res) {
       if (err) throw err;
-      console.log("\nEmployees by Department\n--------------------------------------");
+      console.log(
+        "\nEmployees by Department\n--------------------------------------"
+      );
       console.table(res);
       initialQuestion();
     }
@@ -176,7 +178,9 @@ function employeesByManager() {
     ORDER BY employee.manager_id`,
     function (err, res) {
       if (err) throw err;
-      console.log("\nEmployees by Manager\n--------------------------------------");
+      console.log(
+        "\nEmployees by Manager\n--------------------------------------"
+      );
       console.table(res);
       initialQuestion();
     }
@@ -285,6 +289,7 @@ function removeEmployee() {
           (err, res) => {
             if (err) throw err;
             console.log(res);
+            console.log(`Success! ${res.remove} was removed from employees.`);
             initialQuestion();
           }
         );
@@ -427,17 +432,88 @@ function viewAllDepartments() {
     if (err) throw err;
     console.log("\nDepartment Listing\n--------------------------------------");
     console.table(data);
+    initialQuestion();
   });
 }
 
 function addRole() {
   console.log("Add Role");
-  // TODO: ADD FUNCTION
+  connection.query("SELECT * FROM department", (err, data) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "What role would you like to add?",
+          name: "newRoleTitle",
+        },
+        {
+          type: "input",
+          message: "What is the salary for this new role?",
+          name: "newRoleSalary",
+        },
+        {
+          type: "list",
+          message: "What department does this new role belong to?",
+          name: "newRoleDept",
+          choices: renderDepartmentArray(data),
+        },
+      ])
+      .then((res) => {
+        let departmentID;
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].dept_name === res.newRoleDept) {
+            departmentID = data[i].id;
+          }
+        }
+        connection.query(
+          "INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)",
+          [res.newRoleTitle, res.newRoleSalary, departmentID],
+          (err) => {
+            if (err) throw err;
+            console.log(`Success! ${res.newRoleTitle} was added to roles.`);
+            initialQuestion();
+          }
+        );
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
 }
 
 function removeRole() {
-  console.log("Remove Role");
-  // TODO: ADD FUNCTION
+  // console.log("Remove Role");
+  connection.query("SELECT * FROM roles", (err, data) => {
+    if (err) throw err;
+    inquirer
+      .prompt({
+        type: "list",
+        message: "Which role would you like to remove?",
+        name: "remove",
+        choices: renderRoleArray(data),
+      })
+      .then((res) => {
+        let roleID;
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].title === res.remove) {
+            roleID = data[i].id;
+          }
+        }
+        connection.query(
+          "DELETE FROM roles WHERE id = ?",
+          [roleID],
+          (err, res) => {
+            if (err) throw err;
+            console.log("Success! Role was removed.");
+            initialQuestion();
+          }
+        );
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
 }
 
 function editRole() {
@@ -447,7 +523,7 @@ function editRole() {
 
 // view a list of all roles
 function viewAllRoles() {
-  console.log("View All Roles");
+  // console.log("View All Roles");
   connection.query(
     `SELECT roles.id, roles.title, roles.salary, department.dept_name 
     FROM roles
@@ -456,6 +532,7 @@ function viewAllRoles() {
       if (err) throw err;
       console.log("\nRoles Listing\n--------------------------------------");
       console.table(data);
+      initialQuestion();
     }
   );
 }
@@ -474,4 +551,12 @@ function renderRoleArray(data) {
     roleArray.push(data[i].title);
   }
   return roleArray;
+}
+
+function renderDepartmentArray(data) {
+  const departmentArray = [];
+  for (let i = 0; i < data.length; i++) {
+    departmentArray.push(data[i].dept_name);
+  }
+  return departmentArray;
 }
