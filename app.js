@@ -61,8 +61,8 @@ function initialQuestion() {
         "Add Employee",
         "Remove Employee",
         "Edit Employee",
-        "Update Employee Role",
-        "Update Employee Manager",
+        // "Update Employee Role",
+        // "Update Employee Manager",
         "Add Department",
         "Remove Department",
         "Edit Department",
@@ -87,12 +87,12 @@ function initialQuestion() {
         removeEmployee();
       } else if (res.action === "Edit Employee") {
         editEmployee();
-      } 
+      }
       // else if (res.action === "Update Employee Role") {
       //   updateRole();
       // } else if (res.action === "Update Employee Manager") {
       //   updateManager();
-      // } 
+      // }
       else if (res.action === "Add Department") {
         addDepartment();
       } else if (res.action === "Remove Department") {
@@ -233,7 +233,7 @@ function addEmployee() {
       connection.query(
         "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
         [firstName, lastName, roleID, managerID],
-        (err) => {
+        (err, result) => {
           if (err) throw err;
           console.log(
             `Success! ${firstName} ${lastName} was added to employees.`
@@ -270,7 +270,7 @@ function removeEmployee() {
       connection.query(
         "DELETE FROM employee WHERE id = ?",
         [employeeID],
-        (err) => {
+        (err, result) => {
           if (err) throw err;
           console.log(
             `Success! ${res.remove.first_name} ${res.remove.last_name} was removed.`
@@ -394,7 +394,7 @@ function addDepartment() {
       connection.query(
         "INSERT INTO department (dept_name) VALUES (?)",
         [res.newDeptName],
-        (err) => {
+        (err, result) => {
           if (err) throw err;
           console.log(`Success! ${res.newDeptName} was added to departments.`);
           initialQuestion();
@@ -405,70 +405,73 @@ function addDepartment() {
 
 function removeDepartment() {
   // console.log("Remove Department");
-    inquirer
-      .prompt([
-        {
-          type: "list",
-          message: "Are you sure you would like to remove department?",
-          name: "confirm",
-          choices: ["Yes", "No"],
-        },
-        {
+  inquirer
+    .prompt([
+      // appears to be some sort of bug that won't let a dynamic list item be the first question?
+      {
+        type: "list",
+        message: "Are you sure you would like to remove department?",
+        name: "confirm",
+        choices: ["Yes", "No"],
+      },
+      {
         type: "list",
         message: "Which role would you like to remove?",
         name: "remove",
         choices: getDepartmentArray(),
-      }
+      },
     ])
-      .then((res) => {
-        connection.query(
-          "DELETE FROM department WHERE id = ?",
-          [res.remove.id],
-          (err) => {
-            if (err) throw err;
-            console.log("Success! Department was removed.");
-            initialQuestion();
-          }
-        );
-      })
-      .catch((err) => {
-        if (err) throw err;
-      });
+    .then((res) => {
+      connection.query(
+        "DELETE FROM department WHERE id = ?",
+        [res.remove.id],
+        (err, result) => {
+          if (err) throw err;
+          console.log("Success! Department was removed.");
+          initialQuestion();
+        }
+      );
+    })
+    .catch((err) => {
+      if (err) throw err;
+    });
 }
 
 function editDepartment() {
   // console.log("Edit Department");
-    inquirer
-      .prompt([
-        {
-          type: "list",
-          message: "Are you sure you would like to edit a department?",
-          name: "confirm",
-          choices: ["Yes", "No"],
-        },
-        {
-          type: "list",
-          message: "Which department would you like to edit?",
-          name: "editedDept",
-          choices: getDepartmentArray(),
-        },
-        {
-          type: "input",
-          message: "What would you like to change the department name to?",
-          name: "deptName",
-        },
-      ])
-      .then((res) => {
-        connection.query(
-          "UPDATE department SET dept_name = ? WHERE id = ?",
-          [res.deptName, res.editedDept.id],
-          (err) => {
-            if (err) throw err;
-            console.log(`${res.editedDept.dept_name} was updated to ${res.deptName}.`);
-            initialQuestion();
-          }
-        );
-      });
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Are you sure you would like to edit a department?",
+        name: "confirm",
+        choices: ["Yes", "No"],
+      },
+      {
+        type: "list",
+        message: "Which department would you like to edit?",
+        name: "editedDept",
+        choices: getDepartmentArray(),
+      },
+      {
+        type: "input",
+        message: "What would you like to change the department name to?",
+        name: "deptName",
+      },
+    ])
+    .then((res) => {
+      connection.query(
+        "UPDATE department SET dept_name = ? WHERE id = ?",
+        [res.deptName, res.editedDept.id],
+        (err, result) => {
+          if (err) throw err;
+          console.log(
+            `${res.editedDept.dept_name} was updated to ${res.deptName}.`
+          );
+          initialQuestion();
+        }
+      );
+    });
 }
 
 function viewAllDepartments() {
@@ -483,48 +486,40 @@ function viewAllDepartments() {
 
 function addRole() {
   // console.log("Add Role");
-  connection.query("SELECT * FROM department", (err, data) => {
-    if (err) throw err;
-    inquirer
-      .prompt([
-        {
-          type: "input",
-          message: "What role would you like to add?",
-          name: "newRoleTitle",
-        },
-        {
-          type: "input",
-          message: "What is the salary for this new role?",
-          name: "newRoleSalary",
-        },
-        {
-          type: "list",
-          message: "What department does this new role belong to?",
-          name: "newRoleDept",
-          choices: renderDepartmentArray(data),
-        },
-      ])
-      .then((res) => {
-        let departmentID;
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].dept_name === res.newRoleDept) {
-            departmentID = data[i].id;
-          }
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What role would you like to add?",
+        name: "newRoleTitle",
+      },
+      {
+        type: "input",
+        message: "What is the salary for this new role?",
+        name: "newRoleSalary",
+      },
+      {
+        type: "list",
+        message: "What department does this new role belong to?",
+        name: "newRoleDept",
+        choices: getDepartmentArray(),
+      },
+    ])
+    .then((res) => {
+      let departmentID = res.newRoleDept.id;
+      connection.query(
+        "INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)",
+        [res.newRoleTitle, res.newRoleSalary, departmentID],
+        (err, result) => {
+          if (err) throw err;
+          console.log(`Success! ${res.newRoleTitle} was added to roles.`);
+          initialQuestion();
         }
-        connection.query(
-          "INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)",
-          [res.newRoleTitle, res.newRoleSalary, departmentID],
-          (err) => {
-            if (err) throw err;
-            console.log(`Success! ${res.newRoleTitle} was added to roles.`);
-            initialQuestion();
-          }
-        );
-      })
-      .catch((err) => {
-        if (err) throw err;
-      });
-  });
+      );
+    })
+    .catch((err) => {
+      if (err) throw err;
+    });
 }
 
 function removeRole() {
