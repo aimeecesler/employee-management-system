@@ -412,8 +412,24 @@ function updateManager() {
 }
 
 function addDepartment() {
-  console.log("Add Department");
-  // TODO: ADD FUNCTION
+  // console.log("Add Department");
+  inquirer
+    .prompt({
+      type: "input",
+      message: "What department would you like to add?",
+      name: "newDeptName",
+    })
+    .then((res) => {
+      connection.query(
+        "INSERT INTO department (dept_name) VALUES (?)",
+        [res.newDeptName],
+        (err) => {
+          if (err) throw err;
+          console.log(`Success! ${res.newDeptName} was added to departments.`);
+          initialQuestion();
+        }
+      );
+    });
 }
 
 function removeDepartment() {
@@ -437,7 +453,7 @@ function viewAllDepartments() {
 }
 
 function addRole() {
-  console.log("Add Role");
+  // console.log("Add Role");
   connection.query("SELECT * FROM department", (err, data) => {
     if (err) throw err;
     inquirer
