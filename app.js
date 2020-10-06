@@ -467,8 +467,35 @@ function removeDepartment() {
 }
 
 function editDepartment() {
-  console.log("Edit Department");
-  // TODO: ADD FUNCTION
+  // console.log("Edit Department");
+  connection.query("SELECT * FROM department", (err, data) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          message: "Which department would you like to edit?",
+          name: "editedDept",
+          choices: renderDepartmentArray(data),
+        },
+        {
+          type: "input",
+          message: "What would you like to change the department name to?",
+          name: "deptName",
+        },
+      ])
+      .then((res) => {
+        connection.query(
+          "UPDATE department SET dept_name = ? WHERE dept_name = ?",
+          [res.deptName, res.editedDept],
+          (err) => {
+            if (err) throw err;
+            console.log(`${res.editedDept} was updated to ${res.deptName}.`);
+            initialQuestion();
+          }
+        );
+      });
+  });
 }
 
 function viewAllDepartments() {
@@ -620,48 +647,51 @@ function editRole() {
                 console.log(`No changes made to ${response.editedRole}.`);
                 initialQuestion();
               } else {
-              if (response.salaryChange === "Yes") {
-                connection.query(
-                  "UPDATE roles SET salary = ? WHERE title = ?",
-                  [response.salary, response.editedRole],
-                  (err) => {
-                    if (err) throw err;
-                    console.log(
-                      `Salary was updated for ${response.editedRole}`
-                    );
-                  }
-                );
-              }
-              if (res.departmentChange === "Yes") {
-                let newDeptID;
-                for (let i = 0; i < data.length; i++) {
-                  if (data[i].dept_name === res.department) {
-                    newDeptID = data[i].id;
-                  }
+                if (response.salaryChange === "Yes") {
+                  connection.query(
+                    "UPDATE roles SET salary = ? WHERE title = ?",
+                    [response.salary, response.editedRole],
+                    (err) => {
+                      if (err) throw err;
+                      console.log(
+                        `Salary was updated for ${response.editedRole}`
+                      );
+                    }
+                  );
                 }
-                connection.query(
-                  "UPDATE roles SET department_id = ? WHERE title = ?",
-                  [newDeptID, response.editedRole],
-                  (err) => {
-                    if (err) throw err;
-                    console.log(
-                      `Department was updated for ${response.editedRole}`
-                    );
+                if (res.departmentChange === "Yes") {
+                  let newDeptID;
+                  for (let i = 0; i < data.length; i++) {
+                    if (data[i].dept_name === res.department) {
+                      newDeptID = data[i].id;
+                    }
                   }
-                );
+                  connection.query(
+                    "UPDATE roles SET department_id = ? WHERE title = ?",
+                    [newDeptID, response.editedRole],
+                    (err) => {
+                      if (err) throw err;
+                      console.log(
+                        `Department was updated for ${response.editedRole}`
+                      );
+                    }
+                  );
+                }
+                if (response.titleChange === "Yes") {
+                  connection.query(
+                    "UPDATE roles SET title = ? WHERE title = ?",
+                    [response.title, response.editedRole],
+                    (err) => {
+                      if (err) throw err;
+                      console.log(
+                        `Title was updated for ${response.editedRole}`
+                      );
+                    }
+                  );
+                }
               }
-              if (response.titleChange === "Yes") {
-                connection.query(
-                  "UPDATE roles SET title = ? WHERE title = ?",
-                  [response.title, response.editedRole],
-                  (err) => {
-                    if (err) throw err;
-                    console.log(`Title was updated for ${response.editedRole}`);
-                  }
-                );
-              }
-            }
-            return initialQuestion();
+              // TODO: fix async issues
+              return initialQuestion();
             })
             .catch((err) => {
               if (err) throw err;
