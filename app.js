@@ -433,8 +433,31 @@ function addDepartment() {
 }
 
 function removeDepartment() {
-  console.log("Remove Department");
-  // TODO: ADD FUNCTION
+  // console.log("Remove Department");
+  connection.query("SELECT * FROM department", (err, data) => {
+    if (err) throw err;
+    inquirer
+      .prompt({
+        type: "list",
+        message: "Which role would you like to remove?",
+        name: "remove",
+        choices: renderDepartmentArray(data),
+      })
+      .then((res) => {
+        connection.query(
+          "DELETE FROM department WHERE dept_name = ?",
+          [res.remove],
+          (err) => {
+            if (err) throw err;
+            console.log("Success! Department was removed.");
+            initialQuestion();
+          }
+        );
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
 }
 
 function editDepartment() {
@@ -510,15 +533,9 @@ function removeRole() {
         choices: renderRoleArray(data),
       })
       .then((res) => {
-        let roleID;
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].title === res.remove) {
-            roleID = data[i].id;
-          }
-        }
         connection.query(
-          "DELETE FROM roles WHERE id = ?",
-          [roleID],
+          "DELETE FROM roles WHERE title = ?",
+          [res.remove],
           (err) => {
             if (err) throw err;
             console.log("Success! Role was removed.");
