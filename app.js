@@ -247,38 +247,29 @@ function addEmployee() {
 
 // remove an employee from the database
 function removeEmployee() {
-  console.log("Remove Employee");
-  connection.query("SELECT * FROM employee", (err, data) => {
-    if (err) throw err;
-    inquirer
-      .prompt({
-        type: "list",
-        message: "Which employee would you like to remove?",
-        name: "remove",
-        choices: renderEmployeeArray(data),
-      })
-      .then((res) => {
-        let employeeID;
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].first_name + " " + data[i].last_name === res.remove) {
-            employeeID = data[i].id;
-          }
+  // console.log("Remove Employee");
+  inquirer
+    .prompt({
+      type: "list",
+      message: "Which employee would you like to remove?",
+      name: "remove",
+      choices: getEmployeeArray(),
+    })
+    .then((res) => {
+      let employeeID = res.remove.id;
+      connection.query(
+        "DELETE FROM employee WHERE id = ?",
+        [employeeID],
+        (err) => {
+          if (err) throw err;
+          console.log("Success! Employee was removed.");
+          initialQuestion();
         }
-        connection.query(
-          "DELETE FROM employee WHERE id = ?",
-          [employeeID],
-          (err) => {
-            if (err) throw err;
-            console.log(res);
-            console.log("Success! Employee was removed.");
-            initialQuestion();
-          }
-        );
-      })
-      .catch((err) => {
-        if (err) throw err;
-      });
-  });
+      );
+    })
+    .catch((err) => {
+      if (err) throw err;
+    });
 }
 
 function editEmployee() {
@@ -737,9 +728,11 @@ function getEmployeeArray() {
     (err, data) => {
       if (err) throw err;
       for (let i = 0; i < data.length; i++) {
-        let newEmployee = {name: `${data[i].first_name} ${data[i].last_name}`,
-        value: data[i]}
-        employeeArray.push(newEmployee);
+        let employee = {
+          name: `${data[i].first_name} ${data[i].last_name}`,
+          value: data[i],
+        };
+        employeeArray.push(employee);
       }
     }
   );
@@ -750,8 +743,8 @@ function getRoleArray() {
   connection.query("SELECT id, title FROM roles", (err, data) => {
     if (err) throw err;
     for (let i = 0; i < data.length; i++) {
-      let newRole = {name: data[i].title, value: data[i]}
-      roleArray.push(newRole);
+      let role = { name: data[i].title, value: data[i] };
+      roleArray.push(role);
     }
   });
   return roleArray;
@@ -761,8 +754,8 @@ function getDepartmentArray() {
   connection.query("SELECT * FROM department", (err, data) => {
     if (err) throw err;
     for (let i = 0; i < data.length; i++) {
-      let newDepartment = {name: data[i].dept_name, value: data[i]}
-      departmentArray.push(newDepartment);
+      let department = { name: data[i].dept_name, value: data[i] };
+      departmentArray.push(department);
     }
   });
 
@@ -775,11 +768,13 @@ function getManagerArray() {
     (err, data) => {
       if (err) throw err;
       for (let i = 0; i < data.length; i++) {
-        let newManager = {name: `${data[i].first_name} ${data[i].last_name}`,
-      value: data[i]}
-        managerArray.push(newManager);
+        let manager = {
+          name: `${data[i].first_name} ${data[i].last_name}`,
+          value: data[i],
+        };
+        managerArray.push(manager);
       }
-      managerArray.push({ name: "No Manager", value: {id: null}});
+      managerArray.push({ name: "No Manager", value: { id: null } });
     }
   );
   return managerArray;
