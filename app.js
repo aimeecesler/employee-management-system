@@ -179,13 +179,7 @@ function addEmployee() {
           type: "list",
           message: "What role will this employee have?",
           name: "role",
-          choices: function () {
-            const roleArray = [];
-            for (let i = 0; i < data.length; i++) {
-              roleArray.push(data[i].title);
-            }
-            return roleArray;
-          },
+          choices: renderRoleArray(data),
         },
       ])
       .then((res) => {
@@ -303,13 +297,7 @@ function updateRole() {
               type: "list",
               message: "What role would you like to give them?",
               name: "role",
-              choices: function () {
-                const roleArray = [];
-                for (let i = 0; i < data.length; i++) {
-                  roleArray.push(data[i].title);
-                }
-                return roleArray;
-              },
+              choices: renderRoleArray(data),
             })
             .then((res) => {
               let roleID;
@@ -406,4 +394,12 @@ function renderEmployeeArray(data) {
     employeeArray.push(data[i].first_name + " " + data[i].last_name);
   }
   return employeeArray;
+}
+
+function renderRoleArray(data) {
+  const roleArray = [];
+  for (let i = 0; i < data.length; i++) {
+    roleArray.push(data[i].title);
+  }
+  return roleArray;
 }
