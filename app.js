@@ -60,6 +60,7 @@ function initialQuestion() {
         "View All Employees by Manager",
         "View All Departments",
         "View All Roles",
+        "View Utilized Salary Budget by Department",
         "Add Employee",
         "Remove Employee",
         "Edit Employee",
@@ -101,6 +102,8 @@ function initialQuestion() {
         editRole();
       } else if (res.action === "View All Roles") {
         viewAllRoles();
+      } else if (res.action === "View Utilized Salary Budget by Department") {
+        viewDepartmentBudget();
       } else if (res.action === "Exit") {
         connection.end();
       }
@@ -287,20 +290,25 @@ function editEmployee() {
         type: "input",
         message: "What would you like their new first name to be?",
         name: "firstName",
-        when: (answer) => answer.confirm === "Yes" && answer.itemsToChange.includes("First Name"),
+        when: (answer) =>
+          answer.confirm === "Yes" &&
+          answer.itemsToChange.includes("First Name"),
       },
       {
         type: "input",
         message: "What would you like their new last name to be?",
         name: "lastName",
-        when: (answer) => answer.confirm === "Yes" && answer.itemsToChange.includes("Last Name"),
+        when: (answer) =>
+          answer.confirm === "Yes" &&
+          answer.itemsToChange.includes("Last Name"),
       },
       {
         type: "list",
         message: "What would you like their new role to be?",
         name: "role",
         choices: getRoleArray(),
-        when: (answer) => answer.confirm === "Yes" && answer.itemsToChange.includes("Role"),
+        when: (answer) =>
+          answer.confirm === "Yes" && answer.itemsToChange.includes("Role"),
       },
       {
         type: "list",
@@ -573,20 +581,23 @@ function editRole() {
         type: "input",
         message: "What would you like the new title to be?",
         name: "title",
-        when: (answer) => answer.confirm === "Yes" && answer.itemsToEdit.includes("Title"),
+        when: (answer) =>
+          answer.confirm === "Yes" && answer.itemsToEdit.includes("Title"),
       },
       {
         type: "input",
         message: "What would you like the new salary to be?",
         name: "salary",
-        when: (answer) => answer.confirm === "Yes" && answer.itemsToEdit.includes("Salary"),
+        when: (answer) =>
+          answer.confirm === "Yes" && answer.itemsToEdit.includes("Salary"),
       },
       {
         type: "list",
         message: "What would you like the new department to be?",
         name: "department",
         choices: getDepartmentArray(),
-        when: (answer) => answer.confirm === "Yes" && answer.itemsToEdit.includes("Department"),
+        when: (answer) =>
+          answer.confirm === "Yes" && answer.itemsToEdit.includes("Department"),
       },
     ])
     .then((res) => {
@@ -636,6 +647,25 @@ function viewAllRoles() {
     (err, data) => {
       if (err) throw err;
       console.log("\nRoles Listing\n--------------------------------------");
+      console.table(data);
+      initialQuestion();
+    }
+  );
+}
+
+// view the utilized budget for each department
+function viewDepartmentBudget() {
+  connection.query(
+    `SELECT department.id, department.dept_name, COUNT(employee.role_id) employee_count, SUM(roles.salary) budget
+    FROM department
+    INNER JOIN roles ON department.id = roles.department_id
+    INNER JOIN employee ON employee.role_id = roles.id
+    GROUP BY department.id`,
+    (err, data) => {
+      if (err) throw err;
+      console.log(
+        "\nDepartment Budget Listing\n--------------------------------------"
+      );
       console.table(data);
       initialQuestion();
     }
