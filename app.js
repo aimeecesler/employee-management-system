@@ -287,20 +287,20 @@ function editEmployee() {
         type: "input",
         message: "What would you like their new first name to be?",
         name: "firstName",
-        when: (answer) => answer.itemsToChange.includes("First Name"),
+        when: (answer) => answer.confirm === "Yes" && answer.itemsToChange.includes("First Name"),
       },
       {
         type: "input",
         message: "What would you like their new last name to be?",
         name: "lastName",
-        when: (answer) => answer.itemsToChange.includes("Last Name"),
+        when: (answer) => answer.confirm === "Yes" && answer.itemsToChange.includes("Last Name"),
       },
       {
         type: "list",
         message: "What would you like their new role to be?",
         name: "role",
         choices: getRoleArray(),
-        when: (answer) => answer.itemsToChange.includes("Role"),
+        when: (answer) => answer.confirm === "Yes" && answer.itemsToChange.includes("Role"),
       },
       {
         type: "list",
@@ -573,24 +573,24 @@ function editRole() {
         type: "input",
         message: "What would you like the new title to be?",
         name: "title",
-        when: (answer) => answer.itemsToEdit.includes("Title"),
+        when: (answer) => answer.confirm === "Yes" && answer.itemsToEdit.includes("Title"),
       },
       {
         type: "input",
         message: "What would you like the new salary to be?",
         name: "salary",
-        when: (answer) => answer.itemsToEdit.includes("Salary"),
+        when: (answer) => answer.confirm === "Yes" && answer.itemsToEdit.includes("Salary"),
       },
       {
         type: "list",
         message: "What would you like the new department to be?",
         name: "department",
         choices: getDepartmentArray(),
-        when: (answer) => answer.itemsToEdit.includes("Department"),
+        when: (answer) => answer.confirm === "Yes" && answer.itemsToEdit.includes("Department"),
       },
     ])
     .then((res) => {
-      if (res.conirm === "No") {
+      if (res.confirm === "No") {
         initialQuestion();
       } else {
         for (let i = 0; i < res.itemsToEdit.length; i++) {
