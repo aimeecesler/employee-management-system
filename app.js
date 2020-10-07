@@ -8,8 +8,6 @@ const roleArray = [];
 const departmentArray = [];
 const managerArray = [];
 
-// TODO: UPDATE ALL FUNCTIONS THAT HAVE A CONFIRM SO THAT THEY WILL EXIT IF NO IS SELECTED
-
 // CONNECTION DETAILS
 const connection = mysql.createConnection({
   host: "localhost",
@@ -172,7 +170,6 @@ function employeesByManager() {
 
 // add an employee to the database
 function addEmployee() {
-  // console.log("Add Employee");
   inquirer
     .prompt([
       {
@@ -204,7 +201,6 @@ function addEmployee() {
       const lastName = res.last_name;
       const roleID = res.role.id;
       const managerID = res.manager.id;
-      // console.log(firstName, lastName, roleID, managerID);
       connection.query(
         "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
         [firstName, lastName, roleID, managerID],
@@ -226,7 +222,6 @@ function addEmployee() {
 function removeEmployee() {
   inquirer
     .prompt([
-      // appears to be some sort of bug that won't let a dynamic list item be the first question?
       {
         type: "list",
         message: "Are you sure you would like to remove an employee?",
@@ -264,6 +259,7 @@ function removeEmployee() {
     });
 }
 
+// Edit an existing employee's information
 function editEmployee() {
   inquirer
     .prompt([
@@ -358,8 +354,8 @@ function editEmployee() {
     });
 }
 
+// add a department
 function addDepartment() {
-  // console.log("Add Department");
   inquirer
     .prompt({
       type: "input",
@@ -379,11 +375,10 @@ function addDepartment() {
     });
 }
 
+// remove a department
 function removeDepartment() {
-  // console.log("Remove Department");
   inquirer
     .prompt([
-      // appears to be some sort of bug that won't let a dynamic list item be the first question?
       {
         type: "list",
         message: "Are you sure you would like to remove a department?",
@@ -418,8 +413,8 @@ function removeDepartment() {
     });
 }
 
+// edit an existing department's information
 function editDepartment() {
-  // console.log("Edit Department");
   inquirer
     .prompt([
       {
@@ -464,8 +459,8 @@ function editDepartment() {
     });
 }
 
+// view all departments
 function viewAllDepartments() {
-  // console.log("View All Departments")
   connection.query("SELECT * FROM department", (err, data) => {
     if (err) throw err;
     console.log("\nDepartment Listing\n--------------------------------------");
@@ -474,6 +469,7 @@ function viewAllDepartments() {
   });
 }
 
+// add a role
 function addRole() {
   inquirer
     .prompt([
@@ -511,6 +507,7 @@ function addRole() {
     });
 }
 
+// remove a role
 function removeRole() {
   inquirer
     .prompt([
@@ -548,6 +545,7 @@ function removeRole() {
     });
 }
 
+// edit an existing role's information
 function editRole() {
   inquirer
     .prompt([
@@ -631,7 +629,6 @@ function editRole() {
 
 // view a list of all roles
 function viewAllRoles() {
-  // console.log("View All Roles");
   connection.query(
     `SELECT roles.id, roles.title, roles.salary, department.dept_name 
     FROM roles
@@ -645,6 +642,7 @@ function viewAllRoles() {
   );
 }
 
+// render an array from the employee table in the database
 function getEmployeeArray() {
   connection.query(
     "SELECT id, first_name, last_name FROM employee",
@@ -662,6 +660,7 @@ function getEmployeeArray() {
   return employeeArray;
 }
 
+// render an array from the roles table in the database
 function getRoleArray() {
   connection.query("SELECT id, title FROM roles", (err, data) => {
     if (err) throw err;
@@ -673,6 +672,7 @@ function getRoleArray() {
   return roleArray;
 }
 
+// render an array from the department table in the database
 function getDepartmentArray() {
   connection.query("SELECT * FROM department", (err, data) => {
     if (err) throw err;
@@ -685,6 +685,7 @@ function getDepartmentArray() {
   return departmentArray;
 }
 
+// render an array from the employee table in the database and add a null value for no manager
 function getManagerArray() {
   connection.query(
     "SELECT id, first_name, last_name FROM employee",
