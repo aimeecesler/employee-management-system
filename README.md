@@ -79,7 +79,7 @@ ADD CONTENT
 
   * Delete departments, roles, and employees :heavy_check_mark:
 
-  * View the total utilized budget of a department -- ie the combined salaries of all employees in that department
+  * View the total utilized budget of a department -- ie the combined salaries of all employees in that department :heavy_check_mark:
 
 ---
 
@@ -91,16 +91,16 @@ As always, a huge thanks to our instructional staff for all their hard work!
 
 - [w3schools](https://www.w3schools.com)
 - [Node.js](https://nodejs.org/en/)
-- [MySQL]()
-- [Inquirer]()
+- [MySQL](https://www.mysql.com/)
+- [Inquirer](https://www.npmjs.com/package/inquirer)
 
 ---
 
 ## Links
 
-[Repository Link]()
+[Repository Link](https://github.com/aimeecesler/employee-management-system)
 
-[Demonstration Video]()
+[Demonstration Video](https://drive.google.com/file/d/1fEARzqbKqEfLZUUPVHUzaPHgRnO6GI0-/view)
 
 ---
 
