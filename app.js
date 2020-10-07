@@ -242,18 +242,22 @@ function removeEmployee() {
       },
     ])
     .then((res) => {
-      let employeeID = res.remove.id;
-      connection.query(
-        "DELETE FROM employee WHERE id = ?",
-        [employeeID],
-        (err, result) => {
-          if (err) throw err;
-          console.log(
-            `Success! ${res.remove.first_name} ${res.remove.last_name} was removed.`
-          );
-          initialQuestion();
-        }
-      );
+      if (res.confirm === "No") {
+        initialQuestion();
+      } else {
+        let employeeID = res.remove.id;
+        connection.query(
+          "DELETE FROM employee WHERE id = ?",
+          [employeeID],
+          (err, result) => {
+            if (err) throw err;
+            console.log(
+              `Success! ${res.remove.first_name} ${res.remove.last_name} was removed.`
+            );
+            initialQuestion();
+          }
+        );
+      }
     })
     .catch((err) => {
       if (err) throw err;
@@ -395,15 +399,19 @@ function removeDepartment() {
       },
     ])
     .then((res) => {
-      connection.query(
-        "DELETE FROM department WHERE id = ?",
-        [res.remove.id],
-        (err, result) => {
-          if (err) throw err;
-          console.log("Success! Department was removed.");
-          initialQuestion();
-        }
-      );
+      if (res.confirm === "No") {
+        initialQuestion();
+      } else {
+        connection.query(
+          "DELETE FROM department WHERE id = ?",
+          [res.remove.id],
+          (err, result) => {
+            if (err) throw err;
+            console.log("Success! Department was removed.");
+            initialQuestion();
+          }
+        );
+      }
     })
     .catch((err) => {
       if (err) throw err;
@@ -435,17 +443,24 @@ function editDepartment() {
       },
     ])
     .then((res) => {
-      connection.query(
-        "UPDATE department SET dept_name = ? WHERE id = ?",
-        [res.deptName, res.editedDept.id],
-        (err, result) => {
-          if (err) throw err;
-          console.log(
-            `${res.editedDept.dept_name} was updated to ${res.deptName}.`
-          );
-          initialQuestion();
-        }
-      );
+      if (res.confirm === "No") {
+        initialQuestion();
+      } else {
+        connection.query(
+          "UPDATE department SET dept_name = ? WHERE id = ?",
+          [res.deptName, res.editedDept.id],
+          (err, result) => {
+            if (err) throw err;
+            console.log(
+              `${res.editedDept.dept_name} was updated to ${res.deptName}.`
+            );
+            initialQuestion();
+          }
+        );
+      }
+    })
+    .catch((err) => {
+      if (err) throw err;
     });
 }
 
@@ -460,7 +475,6 @@ function viewAllDepartments() {
 }
 
 function addRole() {
-  // console.log("Add Role");
   inquirer
     .prompt([
       {
@@ -498,7 +512,6 @@ function addRole() {
 }
 
 function removeRole() {
-  // console.log("Remove Role");
   inquirer
     .prompt([
       {
@@ -516,15 +529,19 @@ function removeRole() {
       },
     ])
     .then((res) => {
-      connection.query(
-        "DELETE FROM roles WHERE id = ?",
-        [res.remove.id],
-        (err) => {
-          if (err) throw err;
-          console.log("Success! Role was removed.");
-          initialQuestion();
-        }
-      );
+      if (res.confirm === "No") {
+        initialQuestion();
+      } else {
+        connection.query(
+          "DELETE FROM roles WHERE id = ?",
+          [res.remove.id],
+          (err) => {
+            if (err) throw err;
+            console.log("Success! Role was removed.");
+            initialQuestion();
+          }
+        );
+      }
     })
     .catch((err) => {
       if (err) throw err;
