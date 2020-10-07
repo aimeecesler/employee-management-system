@@ -45,7 +45,39 @@ Edit using VSCode after [installation](#installation). JavaScript, JSON and seed
 
 ## Building the Employee Management System
 
-ADD CONTENT
+Upon opening this command line application, the user will be presented with the company logo as well as a main menu with various options. Details of these options are listed below.
+* View All Employees
+    * If the user selects this option, they will be presented with a table that includes the employee ID, first name, last name, jon title, department, salary and manager name.
+* View All Employees by Department
+    * If the user selects this option, they will be presented with a table that has all the information listed above, and it is sorted by department.
+* View All Employees by Manager
+    * If the user selects this option, they will be presented with a table that has all the information listed above, and it is sorted by manager.
+* View All Departments
+    * If the user selects this option, they will be presented with a table that includes the department ID and department name.
+* View All Roles
+    * If the user selects this option, they will be presented with a table that includes the role ID, title, salary and department name.
+* View Utilized Salary Budget by Department
+    * If the user selects this option, they will be presented with a table that includes a listing of each department name and ID, along with a count of the employees in that department and a total salary budget for that department.
+* Add Employee
+    * If the user selects this option, they will be presented with a series of questions to create a new employee, including first name, last name, role, and manager. Once these details have been provided, a new employee will be made based on the information given.
+* Remove Employee
+    * If the user selects this option, they will be asked to confirm that they do, in fact, want to delete an employee, giving them the opportunity to return to the main menu if they select no. If they select yes, the user will be given a list of employees and prompted to chose which employee they would like to remove. Once chosen, the selected employee will be removed from the database.
+* Edit Employee
+    * If the user selects this option, they will be asked to confirm that they do, in fact, want to edit an employee, giving them the opportunity to return to the main menu if they select no. If they select yes, the user will be given a list of employees and prompted to chose which one they would like to edit. Once chosen, the user will then select which parameters they would like to change and then answer questions based on those selections. Once all questions are answered, the given updates will be made to the database.
+* Add Department
+    * If the user selects this option, they will be presented with a series of questions to create a new department. Once these details have been provided, a new department will be made based on the information given.
+* Remove Department
+    * If the user selects this option, they will be asked to confirm that they do, in fact, want to delete a department, giving them the opportunity to return to the main menu if they select no. If they select yes, the user will be given a list of departments and prompted to chose which one they would like to remove. Once chosen, the selected department will be removed from the database.
+* Edit Department
+    * If the user selects this option, they will be asked to confirm that they do, in fact, want to edit a department, giving them the opportunity to return to the main menu if they select no. If they select yes, the user will be given a list of departments and prompted to chose which one they would like to edit. Once chosen, the user will then select which parameters they would like to change and then answer questions based on those selections. Once all questions are answered, the given updates will be made to the database.
+* Add Role
+    * If the user selects this option, they will be presented with a series of questions to create a new role, including title, salary and department. Once these details have been provided, a new role will be made based on the information given.
+* Remove Role
+    * If the user selects this option, they will be asked to confirm that they do, in fact, want to delete a role, giving them the opportunity to return to the main menu if they select no. If they select yes, the user will be given a list of roles and prompted to chose which one they would like to remove. Once chosen, the selected role will be removed from the database.
+* Edit Role
+    * If the user selects this option, they will be asked to confirm that they do, in fact, want to edit a role, giving them the opportunity to return to the main menu if they select no. If they select yes, the user will be given a list of roles and prompted to chose which one they would like to edit. Once chosen, the user will then select which parameters they would like to change and then answer questions based on those selections. Once all questions are answered, the given updates will be made to the database.
+* Exit
+    * If the user selects this option, the connection will end and the app will close.
 
 ![User Prompt](./assets/add-employee.PNG)
 ![User Prompt 2](./assets/add-role.PNG)
