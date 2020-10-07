@@ -35,6 +35,9 @@ The purpose of this repository is to create a command line application where a c
 Edit using VSCode after [installation](#installation). JavaScript, JSON and seed SQL files are provided.
 
 ![JS](./assets/js.PNG)
+
+---
+
 ![SQL](./assets/seeds.PNG)
 
 ---
@@ -80,9 +83,21 @@ Upon opening this command line application, the user will be presented with the 
     * If the user selects this option, the connection will end and the app will close.
 
 ![User Prompt](./assets/add-employee.PNG)
+
+---
+
 ![User Prompt 2](./assets/add-role.PNG)
+
+---
+
 ![User Prompt 3](./assets/add-department.PNG)
+
+---
+
 ![User Prompt 4](./assets/remove-employee.PNG)
+
+---
+
 ![User Prompt 5](./assets/budget.PNG)
 
 ---
