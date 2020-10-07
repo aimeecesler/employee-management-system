@@ -2,6 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+ENTER CONTENT
 
 ![Start]()
 
@@ -12,7 +13,7 @@
 - [Installation](#installation)
 - [Usage](#Usage)
 - [Building the Employee Management System](#building-the-employee-management-system)
-- [Acceptance Criteria](#acceptance-criteria)
+- [Minimum Requirements](#minimum-requirements)
 - [Credits](#credits)
 - [Resources](#resources)
 - [Links](#Links)
@@ -54,9 +55,31 @@ ADD CONTENT
 
 ---
 
-## Acceptance Criteria
+## Minimum Requirements
 
-:heavy_check_mark:
+* Functional application. :heavy_check_mark:
+
+* GitHub repository with a unique name and a README describing the project. :heavy_check_mark:
+
+* The command-line application should allow users to:
+
+  * Add departments, roles, employees :heavy_check_mark:
+
+  * View departments, roles, employees :heavy_check_mark:
+
+  * Update employee roles :heavy_check_mark:
+
+### Bonus
+
+* The command-line application should allow users to:
+
+  * Update employee managers :heavy_check_mark:
+
+  * View employees by manager :heavy_check_mark:
+
+  * Delete departments, roles, and employees :heavy_check_mark:
+
+  * View the total utilized budget of a department -- ie the combined salaries of all employees in that department
 
 ---
 
