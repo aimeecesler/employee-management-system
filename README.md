@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-ENTER CONTENT
+The purpose of this repository is to create a command line application where a company can track and update their employee's data.
 
 ![Start](./assets/main.PNG)
 
