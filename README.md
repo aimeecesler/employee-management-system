@@ -4,7 +4,7 @@
 
 ENTER CONTENT
 
-![Start]()
+![Start](./assets/main.PNG)
 
 ---
 
@@ -34,12 +34,12 @@ ENTER CONTENT
 
 Edit using VSCode after [installation](#installation). JavaScript, JSON and seed SQL files are provided.
 
-![JS]()
-![SQL]()
+![JS](./assets/js.PNG)
+![SQL](./assets/seeds.PNG)
 
 ---
 
-![package.json]()
+![package.json](./assets/package.PNG)
 
 ---
 
@@ -47,11 +47,11 @@ Edit using VSCode after [installation](#installation). JavaScript, JSON and seed
 
 ADD CONTENT
 
-![User Prompt]()
-![User Prompt 2]()
-![User Prompt 3]()
-![User Prompt 4]()
-![User Prompt 5]()
+![User Prompt](./assets/add-employee.PNG)
+![User Prompt 2](./assets/add-role.PNG)
+![User Prompt 3](./assets/add-department.PNG)
+![User Prompt 4](./assets/remove-employee.PNG)
+![User Prompt 5](./assets/budget.PNG)
 
 ---
 
